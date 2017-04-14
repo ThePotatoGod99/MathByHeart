@@ -14,7 +14,7 @@ public class Stack<E> {
 	
 	public void stack(E newElement) {
 		if (peak == (maxElements-1)) {
-			System.out.println("Stack is full");
+			System.out.println("com.games.potato.mathbyheart.math.Stack is full");
             //ToDo: Change to increase max elements
 		} else {
 			peak = peak + 1;
@@ -24,7 +24,7 @@ public class Stack<E> {
 	
 	public E unstack() {
 		if (peak < 0) {
-			System.out.println("ERROR: Stack is empty");
+			System.out.println("ERROR: com.games.potato.mathbyheart.math.Stack is empty");
 			return (E) null;
 		} else {			
 			E topElement = (E) elements[peak];
