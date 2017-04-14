@@ -11,9 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.games.potato.mathbyheart.Utilities.Stack;
-import com.games.potato.mathbyheart.math.Expression;
 import com.games.potato.mathbyheart.math.Math;
-import com.games.potato.mathbyheart.textBookStyle.Operation;
 
 import java.lang.annotation.ElementType;
 import java.util.ArrayList;
@@ -28,9 +26,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String testString = "(6+1*3)/(4+1)";
+        String testString = "$$\\int{\\frac{1+x*3}{(x+1)*3+2}}dx$$";
         MathView mathView = (MathView) findViewById(R.id.formula_one);
-        mathView.setText(Expression.mathViewFromString(testString));
+        mathView.setText(testString);
     }
 
 }
