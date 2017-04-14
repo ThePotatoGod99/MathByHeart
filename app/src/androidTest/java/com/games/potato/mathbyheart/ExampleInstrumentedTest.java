@@ -1,4 +1,4 @@
-package com.simon.potatogames.mathbyheart;
+package com.games.potato.mathbyheart;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.simon.potatogames.mathbyheart", appContext.getPackageName());
+        assertEquals("com.games.potato.mathbyheart", appContext.getPackageName());
     }
 }

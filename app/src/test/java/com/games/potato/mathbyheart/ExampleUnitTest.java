@@ -1,4 +1,4 @@
-package com.simon.potatogames.mathbyheart;
+package com.games.potato.mathbyheart;
 
 import org.junit.Test;
 
