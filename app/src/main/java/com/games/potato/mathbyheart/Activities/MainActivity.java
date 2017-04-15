@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.games.potato.mathbyheart.R;
 
+import com.games.potato.mathbyheart.math.Math;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,9 +28,11 @@ public class MainActivity extends AppCompatActivity {
 
         String items[] = {getString(R.string.integrals),
                             getString(R.string.derivatives),
+                            getString(R.string.multiplications),
                             getString(R.string.others)};
         String formulas[] = {"$$\\int{\\frac{1}{1+x^2}}dx$$",
                             "$$\\frac{d}{du}(\\frac{u}{v})$$",
+                            "$$3 \\times 4$$",
                             "$$\\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$"};
         CustomList customList = new CustomList(this, items, formulas);
         listView.setAdapter(customList);
@@ -39,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
                // Toast.makeText(MainActivity.this, "ADFASDF " + position, Toast.LENGTH_SHORT).show();
 
                 Intent practiceActivityIntent = new Intent(MainActivity.this, PracticeActivity.class);
-                practiceActivityIntent.setData(Uri.parse("hola"));
+
+                practiceActivityIntent.setData(Uri.parse(parent.getItemAtPosition(position).toString()));
                 startActivity(practiceActivityIntent);
             }
         });

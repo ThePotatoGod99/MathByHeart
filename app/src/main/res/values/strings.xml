@@ -2,5 +2,6 @@
     <string name="app_name">Math by Heart</string>
     <string name="integrals">Integrals</string>
     <string name="derivatives">Derivatives</string>
+    <string name="multiplications">Multiplications</string>
     <string name="others">Others</string>
 </resources>

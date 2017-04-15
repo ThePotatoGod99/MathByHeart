@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="btn_known">btn_known</string>
+    <string name="btn_unknown">btn_unknown</string>
+</resources>
