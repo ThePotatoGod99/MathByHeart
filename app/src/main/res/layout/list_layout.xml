@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text_view"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        />
+
+    <io.github.kexanie.library.MathView
+
+
+        android:id="@+id/math_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+    </io.github.kexanie.library.MathView>
+
+
+</TableLayout>
