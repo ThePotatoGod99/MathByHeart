@@ -2,7 +2,10 @@ package com.games.potato.mathbyheart.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.webkit.ValueCallback;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.games.potato.mathbyheart.math.Math;
@@ -16,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import io.github.kexanie.library.MathView;
+
+
 
 public class PracticeActivity extends AppCompatActivity {
     private MathView mathView;
@@ -103,10 +108,6 @@ public class PracticeActivity extends AppCompatActivity {
         } else {
             Math.print("ERROR: Wrong button tag: " + tag + getString(R.string.btn_known));
         }
-
-
-
-
     }
 
     public void onMathViewPressed(View view) {
@@ -146,6 +147,7 @@ public class PracticeActivity extends AppCompatActivity {
                 text = answers.get(id);
             }
             mathView.setText(text);
+
         } catch (IndexOutOfBoundsException e) {
             Toast.makeText(PracticeActivity.this, "Going back to start", Toast.LENGTH_SHORT).show();
 

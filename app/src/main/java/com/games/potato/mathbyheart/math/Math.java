@@ -38,7 +38,12 @@ public class Math{
 
     //TODO: Remove this.
     public static void print(String string){
-        Log.d("LOGGING_HOLA", string);
+        if(string != null) {
+            Log.d("LOGGING_HOLA", string);
+        }
+        else{
+            print("null");
+        }
     }
     
 }

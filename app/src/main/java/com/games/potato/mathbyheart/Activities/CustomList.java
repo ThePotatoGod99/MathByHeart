@@ -22,7 +22,8 @@ public class CustomList extends ArrayAdapter<String> {
     private final Activity context;
     private String[] items;
     private String[] formulas;
-    private final String ITEM_NOT_FOUND = "ITEM_NOT_FOUND";
+    private MathView[] mathViews;
+    private TextView[] textViews;
 
 
     public CustomList(Activity context, String[] items, String[] formulas) {
@@ -30,6 +31,8 @@ public class CustomList extends ArrayAdapter<String> {
         this.items = items;
         this.formulas = formulas;
         this.context = context;
+        mathViews = new MathView[formulas.length];
+        textViews = new TextView[items.length];
     }
 
     @Override
@@ -40,18 +43,21 @@ public class CustomList extends ArrayAdapter<String> {
         View rowView = inflater.inflate(R.layout.list_layout, null, true);
 
 
-        TextView textView = (TextView) rowView.findViewById(R.id.text_view);
+        textViews[position] = (TextView) rowView.findViewById(R.id.text_view);
 
-        MathView mathView = (MathView) rowView.findViewById(R.id.math_view);
-        mathView.setEngine(MathView.Engine.KATEX);
+        mathViews[position] = (MathView) rowView.findViewById(R.id.math_view);
+        mathViews[position].setEngine(MathView.Engine.KATEX);
+
+
 
         try {
-            textView.setText(items[position]);
-            mathView.setText(formulas[position]);
+            textViews[position].setText(items[position]);
+            mathViews[position].setText(formulas[position]);
         }
         catch(ArrayIndexOutOfBoundsException e){
             //TODO
         }
         return rowView;
     }
+
 }
