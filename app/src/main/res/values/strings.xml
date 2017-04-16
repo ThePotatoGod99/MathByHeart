@@ -4,4 +4,5 @@
     <string name="derivatives">Derivatives</string>
     <string name="multiplications">Multiplications</string>
     <string name="others">Others</string>
+    <string name="action_star">Star this formula</string>
 </resources>

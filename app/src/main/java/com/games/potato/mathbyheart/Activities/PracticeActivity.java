@@ -1,8 +1,13 @@
 package com.games.potato.mathbyheart.Activities;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
@@ -16,10 +21,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import io.github.kexanie.library.MathView;
-
 
 
 public class PracticeActivity extends AppCompatActivity {
@@ -28,8 +33,8 @@ public class PracticeActivity extends AppCompatActivity {
     private ArrayList<String> questions;
     private ArrayList<String> answers;
 
-    private Stack knownFormulas;
-    private Stack unknownFormulas;
+    private Stack<String> knownFormulas;
+    private Stack<String> unknownFormulas;
 
     private String dataFileName;
 
@@ -37,11 +42,20 @@ public class PracticeActivity extends AppCompatActivity {
     private boolean questionsFirst = true;
     private boolean showingQuestion = true;
 
+    Toolbar appToolbar;
+
+    private ArrayList<Boolean> staredItems;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practice);
         Toast.makeText(PracticeActivity.this, getIntent().getDataString(), Toast.LENGTH_SHORT).show();
+
+        appToolbar = (Toolbar) findViewById(R.id.app_toolbar);
+        appToolbar.setTitle(getIntent().getDataString());
+        appToolbar.setTitleTextColor(Color.WHITE);
+        setSupportActionBar(appToolbar);
 
 
         mathView = (MathView) findViewById(R.id.math_view);
@@ -59,6 +73,7 @@ public class PracticeActivity extends AppCompatActivity {
 
         questionNumber = 0;
 
+
     }
 
     @Override
@@ -66,6 +81,38 @@ public class PracticeActivity extends AppCompatActivity {
         super.onStart();
 
         setFormulaWithID(questionNumber, questionsFirst);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.practice_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_favorite:
+                if(!(staredItems.size() > questionNumber)){
+                    staredItems.add(questionNumber, true);
+                    item.setIcon(R.drawable.ic_star_black_24dp);
+                }
+                else if (staredItems.get(questionNumber)) {
+                    item.setIcon(R.drawable.ic_star_border_black_24dp);
+                    staredItems.set(questionNumber, false);
+                }
+                else{
+                    item.setIcon(R.drawable.ic_star_black_24dp);
+                    staredItems.set(questionNumber, true);
+                }
+                return true;
+
+            default:
+                Math.print("ERROR: Action not recognised in onOptionsItemSelected(): " + item.toString() + " id: " + item.getItemId());
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
     public void updateData() {
@@ -79,7 +126,6 @@ public class PracticeActivity extends AppCompatActivity {
             while ((line = br.readLine()) != null) {
                 questions.add(line);
                 answers.add(br.readLine());
-
             }
             br.close();
         } catch (IOException e) {
@@ -87,8 +133,13 @@ public class PracticeActivity extends AppCompatActivity {
             Toast.makeText(PracticeActivity.this, "ERROR WHILE READING FILE: " + dataFileName, Toast.LENGTH_SHORT).show();
             this.onBackPressed();
         }
+        staredItems = new ArrayList<>();
     }
 
+
+    public boolean updateFormula() {
+        return setFormulaWithID(questionNumber, questionsFirst);
+    }
 
 
     /* Buttons */
@@ -96,8 +147,6 @@ public class PracticeActivity extends AppCompatActivity {
     public void onButtonPressed(View view) {
         String tag = view.getTag().toString();
 
-        questionNumber++;
-        updateFormula();
 
         showingQuestion = questionsFirst;
 
@@ -108,10 +157,12 @@ public class PracticeActivity extends AppCompatActivity {
         } else {
             Math.print("ERROR: Wrong button tag: " + tag + getString(R.string.btn_known));
         }
+        questionNumber++;
+        updateFormula();
     }
 
     public void onMathViewPressed(View view) {
-        Math.print("PRESSED "+questionNumber + " : " + showingQuestion );
+        Math.print("PRESSED " + questionNumber + " : " + showingQuestion);
         if (showingQuestion) {
             showingQuestion = false;
         } else {
@@ -130,9 +181,6 @@ public class PracticeActivity extends AppCompatActivity {
         this.mathView = mathView;
     }
 
-    public boolean updateFormula() {
-        return setFormulaWithID(questionNumber, questionsFirst);
-    }
 
     public void setFormula(String formula) {
         mathView.setText(formula);
