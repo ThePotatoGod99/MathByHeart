@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<formulas>
+    <formula>
+        <question>$$\int{\frac{du}{a^2+u^2}}dx$$</question>
+        <answer>$$\frac{1}{a}arctan(\frac{u}{a})+C$$</answer>
+        <starred>false</starred>
+    </formula>
+
+    <formula>
+        <question>$$\int{\frac{du}{\sqrt{a^2-u^2}}}dx$$</question>
+        <answer>$$arcsin(\frac{u}{a})+C$$</answer>
+        <starred>false</starred>
+    </formula>
+
+    <formula>
+        <question>$$\int{\frac{du}{u\sqrt{u^2-a^2}}}dx$$</question>
+        <answer>$$\frac{1}{a}arcsec(\frac{u}{a})+C$$</answer>
+        <starred>false</starred>
+    </formula>
+
+</formulas>
+
+
+

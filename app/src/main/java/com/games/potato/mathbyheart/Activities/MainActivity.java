@@ -47,10 +47,13 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent practiceActivityIntent = new Intent(MainActivity.this, PracticeActivity.class);
 
-                practiceActivityIntent.setData(Uri.parse(parent.getItemAtPosition(position).toString()));
+                practiceActivityIntent.setData(Uri.parse(parent.getItemAtPosition(position).toString() + ".xml"));
                 startActivity(practiceActivityIntent);
             }
         });
+
+
+
 
     }
 
