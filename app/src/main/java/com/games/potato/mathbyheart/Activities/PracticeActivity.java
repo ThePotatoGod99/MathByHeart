@@ -25,9 +25,11 @@ import org.w3c.dom.NodeList;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URI;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -99,32 +101,12 @@ public class PracticeActivity extends AppCompatActivity {
 
 
     public void updateData() {
-        try {
-            formulas = Formulas.read(getAssets().open(dataFileName));
+        formulas = Formulas.read(
+                new File(getFilesDir(),
+                        getString(R.string.path_default_formulas) + "/" + dataFileName)
+        );
+        //TODO: Make app create XML file to store starred formulas
 
-            //TODO: Make app create XML file to store starred formulas
-
-
-           /* Serializer serializer = new Persister();
-            Formulas xd = new Formulas();
-            //  xd.list = formulas.list;ç
-            OutputStream os;
-
-            File file = new File()
-
-                    (URI.create(getAssets().open("xd.xml").toString()));
-            try {
-                serializer.write(xd, file);
-            }
-            catch (Exception e){
-
-            }*/
-
-        } catch (IOException e) {
-            Math.print("ERROR WHILE READING FILE");
-            Toast.makeText(PracticeActivity.this, "ERROR WHILE READING FILE: " + dataFileName, Toast.LENGTH_SHORT).show();
-            this.onBackPressed();
-        }
         staredItems = new ArrayList<>();
     }
 

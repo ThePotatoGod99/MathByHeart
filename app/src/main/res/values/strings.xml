@@ -5,4 +5,5 @@
     <string name="multiplications">Multiplications</string>
     <string name="others">Others</string>
     <string name="action_star">Star this formula</string>
+    <string name="path_default_formulas">default_formulas</string>
 </resources>

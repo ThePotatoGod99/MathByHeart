@@ -15,6 +15,7 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -43,10 +44,10 @@ public class Formulas {
         this.table = new Table();
     }
 
-    public static Formulas read(InputStream inputStream) {
+    public static Formulas read(File file) {
         try {
             Serializer ser = new Persister();
-            Formulas formulas = ser.read(Formulas.class, inputStream);
+            Formulas formulas = ser.read(Formulas.class, file);
             return formulas;
         } catch (Exception e) {
             Math.print(e.toString());
