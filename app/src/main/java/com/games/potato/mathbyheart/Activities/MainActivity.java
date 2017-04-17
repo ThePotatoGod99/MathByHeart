@@ -42,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
         preferences = getSharedPreferences(getApplicationContext().getPackageName(), MODE_PRIVATE);
 
 
-     //   if (preferences.getBoolean("first_start", true)) {
+        if (preferences.getBoolean("first_start", true)) {
             firstRun();
             preferences.edit().putBoolean("first_start", false).commit();
-        //}
+        }
 
 
         ListView listView = (ListView) findViewById(R.id.list_view);

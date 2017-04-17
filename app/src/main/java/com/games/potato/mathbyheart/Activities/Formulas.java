@@ -38,16 +38,17 @@ public class Formulas {
     private boolean questionsFirst = true; /* Should show questions first */
     private boolean showingQuestion = true; /* Last formula returned was a question */
 
+    private File file;
 
     public Formulas() {
         this.list = new ArrayList<>();
-        this.table = new Table();
     }
 
     public static Formulas read(File file) {
         try {
             Serializer ser = new Persister();
             Formulas formulas = ser.read(Formulas.class, file);
+            formulas.file = file;
             return formulas;
         } catch (Exception e) {
             Math.print(e.toString());
@@ -103,7 +104,19 @@ public class Formulas {
     }
 
     public void toggleStarred(int id) {
+
+
+
+
         setStarred(id, !isStarred(id));
+
+        try {
+            Serializer serializer = new Persister();
+            serializer.write(this, file);
+        }
+        catch (Exception e){
+            Math.print(e.toString());
+        }
     }
 
     public void setStarred(int id, boolean starred) {

@@ -87,15 +87,15 @@ public class PracticeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Math.print("ON START");
+
         setFormulaWithID(questionNumber);
-        Math.print("ON START");
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.practice_menu, menu);
+        updateStar();
         return true;
     }
 
