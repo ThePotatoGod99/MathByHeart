@@ -105,7 +105,11 @@ public class PracticeActivity extends AppCompatActivity {
                 new File(getFilesDir(),
                         getString(R.string.path_default_formulas) + "/" + dataFileName)
         );
-        //TODO: Make app create XML file to store starred formulas
+        if (formulas == null) {
+            Math.print("ERROR WHILE READING FILE");
+            Toast.makeText(PracticeActivity.this, "ERROR WHILE READING FILE: " + dataFileName, Toast.LENGTH_SHORT).show();
+            this.onBackPressed();
+        }
 
         staredItems = new ArrayList<>();
     }
@@ -178,7 +182,6 @@ public class PracticeActivity extends AppCompatActivity {
             Toast.makeText(PracticeActivity.this, "Going back to start", Toast.LENGTH_SHORT).show();
             questionNumber = 0; //TODO: change
             setFormulaWithID(questionNumber);
-
             return false;
         }
         return true;
