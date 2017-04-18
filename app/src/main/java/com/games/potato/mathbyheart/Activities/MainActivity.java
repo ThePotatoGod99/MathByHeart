@@ -42,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
         preferences = getSharedPreferences(getApplicationContext().getPackageName(), MODE_PRIVATE);
 
 
-        if (preferences.getBoolean("first_start", true)) {
-            firstRun();
-            preferences.edit().putBoolean("first_start", false).commit();
-        }
+        // if (preferences.getBoolean("first_start", true)) {
+        firstRun();
+        preferences.edit().putBoolean("first_start", false).commit();
+        // }
 
 
         ListView listView = (ListView) findViewById(R.id.list_view);
@@ -84,6 +84,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void firstRun() {
+        try {
+            BufferedReader bf = new BufferedReader(new FileReader(new File(getFilesDir(), "default_formulas/xd.xml")));
+            String line;
+            while ((line = bf.readLine()) != null) {
+                Math.print(line);
+            }
+            Math.print("ADSF");
+        } catch (IOException e) {
+
+        }
         copyFileOrDir(getString(R.string.path_default_formulas));
     }
 

@@ -51,7 +51,7 @@ public class PracticeActivity extends AppCompatActivity {
 
     Toolbar appToolbar;
 
-    private ArrayList<Boolean> staredItems;
+    private ArrayList staredItems;
 
 
     private Formulas formulas;
@@ -137,6 +137,12 @@ public class PracticeActivity extends AppCompatActivity {
             case R.id.action_favorite:
                 formulas.toggleStarred(questionNumber);
                 updateStar();
+
+
+
+
+                }
+
                 return true;
 
             default:
@@ -160,6 +166,8 @@ public class PracticeActivity extends AppCompatActivity {
         questionNumber++;
         updateFormula();
         updateStar();
+
+
     }
 
     public void onMathViewPressed(View view) {

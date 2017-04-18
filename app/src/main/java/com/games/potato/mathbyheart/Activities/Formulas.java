@@ -35,6 +35,10 @@ public class Formulas {
     private Table table;
 
 
+    @ElementList(name = "starredList", required = false)
+    private ArrayList<String> starredList;
+
+
     private boolean questionsFirst = true; /* Should show questions first */
     private boolean showingQuestion = true; /* Last formula returned was a question */
 
@@ -49,6 +53,9 @@ public class Formulas {
             Serializer ser = new Persister();
             Formulas formulas = ser.read(Formulas.class, file);
             formulas.file = file;
+
+
+            Math.print(formulas.starredList.get(0) + "SDFASDF");
             return formulas;
         } catch (Exception e) {
             Math.print(e.toString());
@@ -76,12 +83,18 @@ public class Formulas {
         if (table != null) {
             Math.print("table is not null + " + list);
             if (list.isEmpty()) {
+                String operation = "";
+                String answer = "";
                 for (int x = table.getStartNumber(); x <= table.getEndNumber(); x++) {
                     for (int y = table.getStartNumber(); y <= table.getEndNumber(); y++) {
+                        operation = "$$" + x + table.getOperation() + y + "$$";
+                        answer = "$$" + table.getAnswer(x, y).toString() + "$$";
+
+                        Math.print(operation + " : " + starredList.contains(operation) + " : " + starredList.get(0));
                         list.add(new Formula(
-                                "$$" + x + table.getOperation() + y + "$$",
-                                "$$" + table.getAnswer(x, y).toString() + "$$",
-                                false
+                                operation,
+                                answer,
+                                starredList.contains(operation)
                         ));
                         //TODO: make table entries starrable
                     }
@@ -105,16 +118,22 @@ public class Formulas {
 
     public void toggleStarred(int id) {
 
-
-
-
         setStarred(id, !isStarred(id));
 
         try {
+
             Serializer serializer = new Persister();
-            serializer.write(this, file);
-        }
-        catch (Exception e){
+            if (table != null) {
+                Formulas formula = new Formulas();
+                formula.setStarredList(this.getStarredList());
+                serializer.write(formula, file);/* CHANGE THIS */
+
+            } else {
+                serializer.write(this, file);
+            }
+
+
+        } catch (Exception e) {
             Math.print(e.toString());
         }
     }
@@ -127,6 +146,14 @@ public class Formulas {
         return list.get(id).isStarred();
     }
 
+
+    public ArrayList<String> getStarredList() {
+        return starredList;
+    }
+
+    public void setStarredList(ArrayList<String> starredList) {
+        this.starredList = starredList;
+    }
 
     public static class Formula {
         @Element(name = "question")
