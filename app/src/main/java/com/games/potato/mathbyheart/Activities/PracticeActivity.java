@@ -24,6 +24,7 @@ import org.w3c.dom.NodeList;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -139,9 +140,19 @@ public class PracticeActivity extends AppCompatActivity {
                 updateStar();
 
 
-
+                Math.print("\n\nReadingXML\n");
+                try {
+                    BufferedReader bf = new BufferedReader(new FileReader(new File(getFilesDir(), "default_formulas/Multiplications.xml")));
+                    String line;
+                    while ((line = bf.readLine()) != null) {
+                        Math.print(line);
+                    }
+                    Math.print("ADSF");
+                } catch (IOException e) {
 
                 }
+                Math.print("ASDF");
+
 
                 return true;
 

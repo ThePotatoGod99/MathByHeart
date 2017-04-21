@@ -53,9 +53,6 @@ public class Formulas {
             Serializer ser = new Persister();
             Formulas formulas = ser.read(Formulas.class, file);
             formulas.file = file;
-
-
-            Math.print(formulas.starredList.get(0) + "SDFASDF");
             return formulas;
         } catch (Exception e) {
             Math.print(e.toString());
@@ -81,7 +78,6 @@ public class Formulas {
 
     public Formula getFormula(int id) {
         if (table != null) {
-            Math.print("table is not null + " + list);
             if (list.isEmpty()) {
                 String operation = "";
                 String answer = "";
@@ -89,8 +85,6 @@ public class Formulas {
                     for (int y = table.getStartNumber(); y <= table.getEndNumber(); y++) {
                         operation = "$$" + x + table.getOperation() + y + "$$";
                         answer = "$$" + table.getAnswer(x, y).toString() + "$$";
-
-                        Math.print(operation + " : " + starredList.contains(operation) + " : " + starredList.get(0));
                         list.add(new Formula(
                                 operation,
                                 answer,
@@ -100,11 +94,8 @@ public class Formulas {
                     }
                 }
             }
-
-            return list.get(id);
-        } else {
-            return list.get(id);
         }
+        return list.get(id);
     }
 
 
@@ -121,10 +112,20 @@ public class Formulas {
         setStarred(id, !isStarred(id));
 
         try {
-
             Serializer serializer = new Persister();
             if (table != null) {
+                if(!isStarred(id)){
+                    Math.print("Not Starred " + starredList + " : " + id);
+
+                    starredList.remove(getFormula(id).getQuestion());
+                }
+                else{
+                    Math.print("Starred");
+                    starredList.add(getFormula(id).getQuestion());
+                }
+
                 Formulas formula = new Formulas();
+                formula.table = table;
                 formula.setStarredList(this.getStarredList());
                 serializer.write(formula, file);/* CHANGE THIS */
 

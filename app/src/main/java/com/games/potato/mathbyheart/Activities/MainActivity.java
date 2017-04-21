@@ -41,11 +41,11 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = getSharedPreferences(getApplicationContext().getPackageName(), MODE_PRIVATE);
 
-
-        // if (preferences.getBoolean("first_start", true)) {
-        firstRun();
-        preferences.edit().putBoolean("first_start", false).commit();
-        // }
+        if (preferences.getBoolean("first_start", true)) {
+            Math.print("FirstRun");
+            firstRun();
+            preferences.edit().putBoolean("first_start", false).commit();
+        }
 
 
         ListView listView = (ListView) findViewById(R.id.list_view);
@@ -83,9 +83,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void list(File file) {
+        for (String string : file.list()) {
+            Math.print(string);
+        }
+        Math.print("\n-----------\n");
+    }
+
+
+
+
     public void firstRun() {
+        Math.print("FirstRun: \n\n");
+        File file = new File(getFilesDir(), "default_formulas");
+        list(getFilesDir());
+        list(file);
+
+
+        //TODO REMOVE THIS:
+
+        new File(file, "Multiplications.xml").delete();
+        new File(file, "xd.xml").delete();
+
+
+        copyFileOrDir(getString(R.string.path_default_formulas));
+
+
+        Math.print("\n\nReadingXML\n");
         try {
-            BufferedReader bf = new BufferedReader(new FileReader(new File(getFilesDir(), "default_formulas/xd.xml")));
+            BufferedReader bf = new BufferedReader(new FileReader(new File(getFilesDir(), "default_formulas/Multiplications.xml")));
             String line;
             while ((line = bf.readLine()) != null) {
                 Math.print(line);
@@ -94,9 +120,12 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
 
         }
-        copyFileOrDir(getString(R.string.path_default_formulas));
+        Math.print("ASDF");
     }
 
+
+
+    //TODO: Move to other file
     public void copyFileOrDir(String path) {
         String assets[];
         try {
