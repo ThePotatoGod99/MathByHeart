@@ -43,10 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (preferences.getBoolean("first_start", true)) {
             Math.print("FirstRun");
-            firstRun();
+            reset();
             preferences.edit().putBoolean("first_start", false).commit();
         }
-
 
         ListView listView = (ListView) findViewById(R.id.list_view);
 
@@ -91,41 +90,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     public void firstRun() {
-        Math.print("FirstRun: \n\n");
-        File file = new File(getFilesDir(), "default_formulas");
-        list(getFilesDir());
-        list(file);
-
-
-        //TODO REMOVE THIS:
-
-        new File(file, "Multiplications.xml").delete();
-        new File(file, "xd.xml").delete();
-
-
         copyFileOrDir(getString(R.string.path_default_formulas));
-
-
-        Math.print("\n\nReadingXML\n");
-        try {
-            BufferedReader bf = new BufferedReader(new FileReader(new File(getFilesDir(), "default_formulas/Multiplications.xml")));
-            String line;
-            while ((line = bf.readLine()) != null) {
-                Math.print(line);
-            }
-            Math.print("ADSF");
-        } catch (IOException e) {
-
-        }
-        Math.print("ASDF");
+        Math.print("\nEnd first run\n");
     }
 
 
-
     //TODO: Move to other file
+
+    public void reset() {
+        Math.print("FirstRun: \n\n");
+        File file = new File(getFilesDir(), "default_formulas");
+
+        Math.print("Deleting these files: ");
+        list(file);
+
+        for (File file1 : file.listFiles()) {
+            file1.delete();
+        }
+
+        list(file);
+
+
+        firstRun();
+        Math.print("\nFiles:");
+        list(file);
+
+        Math.print("\n\nApp Starting \n\n\n");
+
+
+    }
+
     public void copyFileOrDir(String path) {
         String assets[];
         try {

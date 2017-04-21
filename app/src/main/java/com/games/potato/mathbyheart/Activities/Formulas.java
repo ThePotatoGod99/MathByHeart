@@ -228,8 +228,15 @@ public class Formulas {
         }
 
         public Double getAnswer(double number1, double number2) {
-            if (operation.equals("\\times")) {
-                return number1 * number2;
+            switch (operation){
+                case "\\times":
+                    return number1 * number2;
+                case "\\div":
+                    return number1 / number2;
+                case "+":
+                    return number1 + number2;
+                case "-":
+                    return number1 - number2;
             }
             return new Double(0);//TODO
         }
