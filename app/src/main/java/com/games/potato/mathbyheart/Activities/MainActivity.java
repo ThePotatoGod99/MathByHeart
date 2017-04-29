@@ -43,9 +43,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (preferences.getBoolean("first_start", true)) {
             Math.print("FirstRun");
-            reset();
+            firstRun();
             preferences.edit().putBoolean("first_start", false).commit();
         }
+        reset();//TODO: delete
+
 
         ListView listView = (ListView) findViewById(R.id.list_view);
 
