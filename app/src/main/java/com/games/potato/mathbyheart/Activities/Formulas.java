@@ -14,8 +14,11 @@ import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -55,7 +58,7 @@ public class Formulas {
             formulas.file = file;
             return formulas;
         } catch (Exception e) {
-            Math.print(e.toString());
+            Math.print("ERROR in Formulas.java read(): " + e.toString());
             return null;
         }
 
@@ -107,31 +110,67 @@ public class Formulas {
         this.questionsFirst = questionsFirst;
     }
 
-    public void toggleStarred(int id) {
+    public void toggleStarred(int id, File starredFile) {
 
         setStarred(id, !isStarred(id));
 
         try {
             Serializer serializer = new Persister();
             if (table != null) {
-                if(!isStarred(id)){
+                if (!isStarred(id)) {
                     Math.print("Not Starred " + starredList + " : " + id);
 
                     starredList.remove(getFormula(id).getQuestion());
-                }
-                else{
+                } else {
                     Math.print("Starred");
                     starredList.add(getFormula(id).getQuestion());
                 }
 
-                Formulas formula = new Formulas();
+                Formulas formula = new Formulas();//TODO: Check this
                 formula.table = table;
                 formula.setStarredList(this.getStarredList());
                 serializer.write(formula, file);/* CHANGE THIS */
 
             } else {
                 serializer.write(this, file);
+
+
             }
+
+            Formulas formula = Formulas.read(starredFile);
+            Math.print("1" + formula);
+            if (formula == null) {
+                Math.print("XD");
+                formula = new Formulas();
+            } else {
+                starredFile.delete();
+            }
+
+            FileOutputStream outputStream;
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(starredFile));
+            try {
+                bufferedWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                        "<formulas>\n" +
+                        "</formulas>"
+                );//TODO: Change
+                bufferedWriter.flush();
+                bufferedWriter.close();
+            } catch (Exception e) {
+                Math.print("Couldn't create file -> Formulas.java toggleStarred()");
+                e.printStackTrace();
+            }
+
+
+            if (isStarred(id)) {
+                if (!formula.list.contains(getFormula(id))) {
+                    formula.list.add(getFormula(id));
+                }
+            } else {
+                formula.list.remove(getFormula(id));
+            }
+            Math.print("2");
+            serializer.write(formula, starredFile);
+            Math.print("Writing to " + starredFile.getAbsolutePath());
 
 
         } catch (Exception e) {
@@ -156,6 +195,8 @@ public class Formulas {
         this.starredList = starredList;
     }
 
+
+    /* Formula Class */
     public static class Formula {
         @Element(name = "question")
         private String question;
@@ -201,6 +242,8 @@ public class Formulas {
         }
     }
 
+
+    /* Table Class */
     public static class Table {
         @Element(name = "operation")
         private String operation;
@@ -228,7 +271,7 @@ public class Formulas {
         }
 
         public Double getAnswer(double number1, double number2) {
-            switch (operation){
+            switch (operation) {
                 case "\\times":
                     return number1 * number2;
                 case "\\div":
