@@ -112,6 +112,8 @@ public class PracticeActivity extends AppCompatActivity {
             this.onBackPressed();
         }
 
+
+
         staredItems = new ArrayList<>();
     }
 
@@ -136,24 +138,10 @@ public class PracticeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_favorite:
-                formulas.toggleStarred(questionNumber);
+                File file = new File(getFilesDir(),
+                        getString(R.string.path_default_formulas) + "/" + "starredFormulas.xml");
+                formulas.toggleStarred(questionNumber, file);
                 updateStar();
-
-
-                Math.print("\n\nReadingXML\n");
-                try {
-                    BufferedReader bf = new BufferedReader(new FileReader(new File(getFilesDir(), "default_formulas/Multiplications.xml")));
-                    String line;
-                    while ((line = bf.readLine()) != null) {
-                        Math.print(line);
-                    }
-                    Math.print("ADSF");
-                } catch (IOException e) {
-
-                }
-                Math.print("ASDF");
-
-
                 return true;
 
             default:

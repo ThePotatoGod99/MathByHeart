@@ -14,8 +14,11 @@ import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -55,7 +58,7 @@ public class Formulas {
             formulas.file = file;
             return formulas;
         } catch (Exception e) {
-            Math.print(e.toString());
+            Math.print("ERROR in Formulas.java read(): " + e.toString());
             return null;
         }
 
@@ -107,37 +110,60 @@ public class Formulas {
         this.questionsFirst = questionsFirst;
     }
 
-    public void toggleStarred(int id) {
-
+    public void toggleStarred(int id, File starredFile) {
         setStarred(id, !isStarred(id));
-
         try {
             Serializer serializer = new Persister();
             if (table != null) {
-                if(!isStarred(id)){
-                    Math.print("Not Starred " + starredList + " : " + id);
-
+                /* If table exists, we must add the starred formulas at the end of the table XML file */
+                if (!isStarred(id)) {
                     starredList.remove(getFormula(id).getQuestion());
-                }
-                else{
-                    Math.print("Starred");
+                } else {
                     starredList.add(getFormula(id).getQuestion());
                 }
-
-                Formulas formula = new Formulas();
-                formula.table = table;
-                formula.setStarredList(this.getStarredList());
-                serializer.write(formula, file);/* CHANGE THIS */
-
+                serializer.write(this, file);
             } else {
                 serializer.write(this, file);
             }
 
 
+            /* Write changes to starredFormulas file */
+            Formulas formula = Formulas.read(starredFile);
+            if (formula == null) {
+            /*If the file doesn't exist, create a new formula object to write in a new XML file */
+                formula = new Formulas();
+            } else {
+            /* Delete old file if it exists (it will be replaced with an updated version */
+                starredFile.delete();
+            }
+
+            try {
+            /* Create the file */
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(starredFile));
+                bufferedWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                        "<formulas>\n" +
+                        "</formulas>"
+                );//TODO: Change
+                bufferedWriter.flush();
+                bufferedWriter.close();
+            } catch (Exception e) {
+                System.err.println("Couldn't create file -> Formulas.java toggleStarred()\n" + e.toString());
+            }
+
+            if (isStarred(id)) {
+                if (!formula.list.contains(getFormula(id))) {
+                    formula.list.add(getFormula(id));
+                }
+            } else if(formula.getFormula(id).equals(this.getFormula(id))){
+                formula.list.remove(id);
+            }
+            serializer.write(formula, starredFile);
+
         } catch (Exception e) {
             Math.print(e.toString());
         }
     }
+
 
     public void setStarred(int id, boolean starred) {
         list.get(id).setStarred(starred);
@@ -156,11 +182,16 @@ public class Formulas {
         this.starredList = starredList;
     }
 
+
+    /* Formula Class */
     public static class Formula {
         @Element(name = "question")
         private String question;
         @Element(name = "answer")
         private String answer;
+
+
+
         @Element(name = "starred")
         private boolean starred;
 
@@ -199,8 +230,34 @@ public class Formulas {
         public void setStarred(boolean starred) {
             this.starred = starred;
         }
+
+        @Override
+        public String toString() {
+            return "Formula{" +
+                    "question='" + question + '\'' +
+                    ", answer='" + answer + '\'' +
+                    ", starred=" + starred +
+                    '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Formula formula = (Formula) o;
+
+            if (starred != formula.starred) return false;
+            if (question != null ? !question.equals(formula.question) : formula.question != null)
+                return false;
+            return answer != null ? answer.equals(formula.answer) : formula.answer == null;
+
+        }
+
     }
 
+
+    /* Table Class */
     public static class Table {
         @Element(name = "operation")
         private String operation;
@@ -228,7 +285,7 @@ public class Formulas {
         }
 
         public Double getAnswer(double number1, double number2) {
-            switch (operation){
+            switch (operation) {
                 case "\\times":
                     return number1 * number2;
                 case "\\div":
