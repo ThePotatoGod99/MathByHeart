@@ -142,22 +142,6 @@ public class PracticeActivity extends AppCompatActivity {
                         getString(R.string.path_default_formulas) + "/" + "starredFormulas.xml");
                 formulas.toggleStarred(questionNumber, file);
                 updateStar();
-
-
-                Math.print("\n\nReadingXML\n");
-                try {
-                    BufferedReader bf = new BufferedReader(new FileReader(new File(getFilesDir(), "default_formulas/Multiplications.xml")));
-                    String line;
-                    while ((line = bf.readLine()) != null) {
-                        Math.print(line);
-                    }
-                    Math.print("ADSF");
-                } catch (IOException e) {
-
-                }
-                Math.print("ASDF");
-
-
                 return true;
 
             default:

@@ -111,44 +111,35 @@ public class Formulas {
     }
 
     public void toggleStarred(int id, File starredFile) {
-
         setStarred(id, !isStarred(id));
-
         try {
             Serializer serializer = new Persister();
             if (table != null) {
+                /* If table exists, we must add the starred formulas at the end of the table XML file */
                 if (!isStarred(id)) {
-                    Math.print("Not Starred " + starredList + " : " + id);
-
                     starredList.remove(getFormula(id).getQuestion());
                 } else {
-                    Math.print("Starred");
                     starredList.add(getFormula(id).getQuestion());
                 }
-
-                Formulas formula = new Formulas();//TODO: Check this
-                formula.table = table;
-                formula.setStarredList(this.getStarredList());
-                serializer.write(formula, file);/* CHANGE THIS */
-
+                serializer.write(this, file);
             } else {
                 serializer.write(this, file);
-
-
             }
 
+
+            /* Write changes to starredFormulas file */
             Formulas formula = Formulas.read(starredFile);
-            Math.print("1" + formula);
             if (formula == null) {
-                Math.print("XD");
+            /*If the file doesn't exist, create a new formula object to write in a new XML file */
                 formula = new Formulas();
             } else {
+            /* Delete old file if it exists (it will be replaced with an updated version */
                 starredFile.delete();
             }
 
-            FileOutputStream outputStream;
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(starredFile));
             try {
+            /* Create the file */
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(starredFile));
                 bufferedWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                         "<formulas>\n" +
                         "</formulas>"
@@ -156,27 +147,23 @@ public class Formulas {
                 bufferedWriter.flush();
                 bufferedWriter.close();
             } catch (Exception e) {
-                Math.print("Couldn't create file -> Formulas.java toggleStarred()");
-                e.printStackTrace();
+                System.err.println("Couldn't create file -> Formulas.java toggleStarred()\n" + e.toString());
             }
-
 
             if (isStarred(id)) {
                 if (!formula.list.contains(getFormula(id))) {
                     formula.list.add(getFormula(id));
                 }
-            } else {
-                formula.list.remove(getFormula(id));
+            } else if(formula.getFormula(id).equals(this.getFormula(id))){
+                formula.list.remove(id);
             }
-            Math.print("2");
             serializer.write(formula, starredFile);
-            Math.print("Writing to " + starredFile.getAbsolutePath());
-
 
         } catch (Exception e) {
             Math.print(e.toString());
         }
     }
+
 
     public void setStarred(int id, boolean starred) {
         list.get(id).setStarred(starred);
@@ -202,6 +189,9 @@ public class Formulas {
         private String question;
         @Element(name = "answer")
         private String answer;
+
+
+
         @Element(name = "starred")
         private boolean starred;
 
@@ -240,6 +230,30 @@ public class Formulas {
         public void setStarred(boolean starred) {
             this.starred = starred;
         }
+
+        @Override
+        public String toString() {
+            return "Formula{" +
+                    "question='" + question + '\'' +
+                    ", answer='" + answer + '\'' +
+                    ", starred=" + starred +
+                    '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Formula formula = (Formula) o;
+
+            if (starred != formula.starred) return false;
+            if (question != null ? !question.equals(formula.question) : formula.question != null)
+                return false;
+            return answer != null ? answer.equals(formula.answer) : formula.answer == null;
+
+        }
+
     }
 
 
