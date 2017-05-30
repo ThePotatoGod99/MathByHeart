@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.games.potato.mathbyheart.Data.FormulaList;
 import com.games.potato.mathbyheart.math.Math;
 import com.games.potato.mathbyheart.R;
 
@@ -32,23 +33,18 @@ public class PracticeActivity extends AppCompatActivity {
 
     Toolbar appToolbar;
 
-    private ArrayList staredItems;
 
 
     private FormulaList formulaList;
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void init() {
         setContentView(R.layout.activity_practice);
-        Toast.makeText(PracticeActivity.this, getIntent().getDataString(), Toast.LENGTH_SHORT).show();
 
         appToolbar = (Toolbar) findViewById(R.id.app_toolbar);
         appToolbar.setTitle(getIntent().getDataString());
         appToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(appToolbar);
-
 
         mathView = (MathView) findViewById(R.id.math_view);
         mathView.setEngine(MathView.Engine.KATEX);
@@ -56,20 +52,27 @@ public class PracticeActivity extends AppCompatActivity {
         knownFormulas = new Stack();
         unknownFormulas = new Stack();
 
-        dataFileName = getIntent().getDataString();
-
-        updateData();
 
         questionNumber = 0;
+    }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+        Toast.makeText(PracticeActivity.this, getIntent().getDataString(), Toast.LENGTH_SHORT).show();
+
+        dataFileName = getIntent().getDataString();
+        init();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        setFormulaWithID(questionNumber);
+        if(readData()){
+            setFormulaWithID(questionNumber);
+        }
     }
 
     @Override
@@ -81,19 +84,25 @@ public class PracticeActivity extends AppCompatActivity {
     }
 
 
-    public void updateData() {
-        formulaList = FormulaList.read(
-                new File(getFilesDir(),
-                        getString(R.string.path_default_formulas) + "/" + dataFileName)
-        );
-        if (formulaList == null) {
-            Math.error("ERROR WHILE READING FILE");
-            Toast.makeText(PracticeActivity.this, "ERROR WHILE READING FILE: " + dataFileName, Toast.LENGTH_SHORT).show();
-            this.onBackPressed();
+    public boolean readData() {
+        if (dataFileName.equals("starredFormulas.xml")) {//TODO CHANGE
+            return findStarredFormulas();
+
+        } else {
+            formulaList = FormulaList.read(
+                    new File(getFilesDir(),
+                            getString(R.string.path_default_formulas) + "/" + dataFileName)
+            );
+            if (formulaList == null) {
+                Math.error("ERROR WHILE READING FILE");
+                Toast.makeText(PracticeActivity.this, "ERROR WHILE READING FILE: " + dataFileName, Toast.LENGTH_SHORT).show();
+                this.onBackPressed();
+                return false;
+            }
+            return true;
         }
 
 
-        staredItems = new ArrayList<>();
     }
 
 
@@ -144,6 +153,39 @@ public class PracticeActivity extends AppCompatActivity {
     }
 
 
+    public boolean findStarredFormulas() {
+        /* In default formulas */
+        File file = new File(getFilesDir(), getString(R.string.path_default_formulas));
+
+        formulaList = new FormulaList();
+        FormulaList tempFormulaList;
+
+        for(File file1 : file.listFiles()){
+            tempFormulaList = FormulaList.read(file1);
+            Math.print(file1.toString());
+
+            for(FormulaList.Formula formula : tempFormulaList){
+                Math.print(formula + " : " );
+                if(formula.isStarred()){
+                    /* Adding only the starred formulas to the formulaList */
+                    this.formulaList.add(formula);
+                }
+            }
+        }
+        Math.print("SDF " + formulaList);
+        if(this.formulaList.isEmpty()){
+            Math.print("EMPTY");
+            Toast.makeText(PracticeActivity.this, "No starred formulas", Toast.LENGTH_SHORT).show();
+            this.onBackPressed();
+            return false;
+        }
+
+        return true;
+//        for (File file : getFilesDir().listFiles()) {
+//            Math.print(file.getAbsolutePath() + ": " + file.getName());
+//
+//        }
+    }
 
 
     /* Buttons */
@@ -206,5 +248,13 @@ public class PracticeActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    public void setFormulaList(FormulaList formulaList) {
+        this.formulaList = formulaList;
+    }
+
+    public FormulaList getFormulaList() {
+        return formulaList;
     }
 }

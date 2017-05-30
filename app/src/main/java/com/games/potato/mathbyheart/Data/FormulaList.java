@@ -1,4 +1,4 @@
-package com.games.potato.mathbyheart.Activities;
+package com.games.potato.mathbyheart.Data;
 
 import android.support.annotation.NonNull;
 
@@ -23,14 +23,12 @@ import java.util.ListIterator;
 
 @Root(name = "formulaList")
 public class FormulaList implements List<FormulaList.Formula> {
+
     /* Elements */
     @ElementList(required = false, inline = true)
     private ArrayList<Formula> list;
-
     @Element(name = "table", required = false)
     private Table table;
-
-
     @ElementList(name = "starredList", required = false)
     private ArrayList<String> starredList;
 
@@ -95,7 +93,6 @@ public class FormulaList implements List<FormulaList.Formula> {
                                 answer,
                                 starredList.contains(operation)
                         ));
-                        //TODO: make table entries starrable
                     }
                 }
             }
@@ -295,7 +292,7 @@ public class FormulaList implements List<FormulaList.Formula> {
 
 
         @Element(name = "starred")
-        private boolean starred;
+        private boolean starred = false;
 
 
         public Formula(String question, String answer, boolean starred) {
