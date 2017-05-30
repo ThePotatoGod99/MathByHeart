@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.view.menu.ActionMenuItem;
 import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,8 +24,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -107,11 +110,10 @@ public class PracticeActivity extends AppCompatActivity {
                         getString(R.string.path_default_formulas) + "/" + dataFileName)
         );
         if (formulas == null) {
-            Math.print("ERROR WHILE READING FILE");
+            Math.error("ERROR WHILE READING FILE");
             Toast.makeText(PracticeActivity.this, "ERROR WHILE READING FILE: " + dataFileName, Toast.LENGTH_SHORT).show();
             this.onBackPressed();
         }
-
 
 
         staredItems = new ArrayList<>();
@@ -129,7 +131,42 @@ public class PracticeActivity extends AppCompatActivity {
         } else {
             star.setIcon(R.drawable.ic_star_border_black_24dp);
         }
+
+//        File file = new File(getFilesDir(),
+//                getString(R.string.path_default_formulas) + "/" + "starredFormulas.xml");
+//
+//            /* Write changes to starredFormulas file */
+//        Formulas formula = Formulas.read(file);
+//        if (formula == null) {
+//            /*If the file doesn't exist, create a new formula object to write in a new XML file */
+//            formula = new Formulas();
+//        } else {
+//            /* Delete old file if it exists (it will be replaced with an updated version */
+//            file.delete();
+//        }
+//
+//        try {
+//            /* Create the file */
+//            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+//            bufferedWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+//                    "<formulas>\n" +
+//                    "</formulas>"
+//            );//TODO: Change
+//            bufferedWriter.flush();
+//            bufferedWriter.close();
+//        } catch (Exception e) {
+//            System.err.println("Couldn't create file -> Formulas.java toggleStarred()\n" + e.toString());
+//        }
+//
+//        if (formulas.isStarred(questionNumber)) {
+//                formula.addFormula(formulas.getFormula(questionNumber));
+//        } else if (formula.getFormula(questionNumber).equals(formulas.getFormula(questionNumber))) {
+//            formula.removeFormulaNumber(questionNumber);
+//        }
+//        formula.write(file);
     }
+
+
 
 
     /* Buttons */
@@ -145,7 +182,7 @@ public class PracticeActivity extends AppCompatActivity {
                 return true;
 
             default:
-                Math.print("ERROR: Action not recognised in onOptionsItemSelected(): " + item.toString() + " id: " + item.getItemId());
+                Math.error("ERROR: Action not recognised in onOptionsItemSelected(): " + item.toString() + " id: " + item.getItemId());
                 return super.onOptionsItemSelected(item);
         }
 
@@ -159,7 +196,7 @@ public class PracticeActivity extends AppCompatActivity {
         } else if (tag.equals(getString(R.string.btn_unknown))) {
             unknownFormulas.add(formulas.getFormula(questionNumber));
         } else {
-            Math.print("ERROR: Wrong button tag: " + tag + getString(R.string.btn_known));
+            Math.error("ERROR: Wrong button tag: " + tag + getString(R.string.btn_known));
         }
 
         questionNumber++;

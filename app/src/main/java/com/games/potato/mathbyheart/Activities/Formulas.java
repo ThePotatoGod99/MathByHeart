@@ -2,6 +2,7 @@ package com.games.potato.mathbyheart.Activities;
 
 import android.app.Activity;
 import android.renderscript.ScriptGroup;
+import android.support.annotation.NonNull;
 
 import com.games.potato.mathbyheart.R;
 import com.games.potato.mathbyheart.math.Math;
@@ -21,15 +22,19 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by Simon on 2017-04-16.
  */
 
 @Root(name = "formulas")
-public class Formulas {
+public class Formulas implements List<Formulas.Formula> {
     /* Elements */
     @ElementList(required = false, inline = true)
     private ArrayList<Formula> list;
@@ -51,6 +56,7 @@ public class Formulas {
         this.list = new ArrayList<>();
     }
 
+
     public static Formulas read(File file) {
         try {
             Serializer ser = new Persister();
@@ -58,10 +64,18 @@ public class Formulas {
             formulas.file = file;
             return formulas;
         } catch (Exception e) {
-            Math.print("ERROR in Formulas.java read(): " + e.toString());
+            Math.error("ERROR in Formulas.java read(): " + e.toString());
             return null;
         }
+    }
 
+    public void write(File file) {
+        try {
+            Serializer serializer = new Persister();
+            serializer.write(this, file);
+        } catch (Exception e) {
+
+        }
     }
 
 
@@ -81,14 +95,14 @@ public class Formulas {
 
     public Formula getFormula(int id) {
         if (table != null) {
-            if (list.isEmpty()) {
+            if (this.isEmpty()) {
                 String operation = "";
                 String answer = "";
                 for (int x = table.getStartNumber(); x <= table.getEndNumber(); x++) {
                     for (int y = table.getStartNumber(); y <= table.getEndNumber(); y++) {
                         operation = "$$" + x + table.getOperation() + y + "$$";
                         answer = "$$" + table.getAnswer(x, y).toString() + "$$";
-                        list.add(new Formula(
+                        this.add(new Formula(
                                 operation,
                                 answer,
                                 starredList.contains(operation)
@@ -98,7 +112,20 @@ public class Formulas {
                 }
             }
         }
-        return list.get(id);
+        return this.get(id);
+    }
+
+    public boolean addFormula(Formula formula) {
+        if (this.contains(formula)) {
+            return false;
+        } else {
+            this.add(formula);
+            return true;
+        }
+    }
+
+    public Formula removeFormulaNumber(int id) {
+        return this.remove(id);
     }
 
 
@@ -110,67 +137,29 @@ public class Formulas {
         this.questionsFirst = questionsFirst;
     }
 
+
     public void toggleStarred(int id, File starredFile) {
         setStarred(id, !isStarred(id));
-        try {
-            Serializer serializer = new Persister();
-            if (table != null) {
+        if (table != null) {
                 /* If table exists, we must add the starred formulas at the end of the table XML file */
-                if (!isStarred(id)) {
-                    starredList.remove(getFormula(id).getQuestion());
-                } else {
-                    starredList.add(getFormula(id).getQuestion());
-                }
-                serializer.write(this, file);
+            if (!isStarred(id)) {
+                starredList.remove(getFormula(id).getQuestion());
             } else {
-                serializer.write(this, file);
+                starredList.add(getFormula(id).getQuestion());
             }
-
-
-            /* Write changes to starredFormulas file */
-            Formulas formula = Formulas.read(starredFile);
-            if (formula == null) {
-            /*If the file doesn't exist, create a new formula object to write in a new XML file */
-                formula = new Formulas();
-            } else {
-            /* Delete old file if it exists (it will be replaced with an updated version */
-                starredFile.delete();
-            }
-
-            try {
-            /* Create the file */
-                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(starredFile));
-                bufferedWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                        "<formulas>\n" +
-                        "</formulas>"
-                );//TODO: Change
-                bufferedWriter.flush();
-                bufferedWriter.close();
-            } catch (Exception e) {
-                System.err.println("Couldn't create file -> Formulas.java toggleStarred()\n" + e.toString());
-            }
-
-            if (isStarred(id)) {
-                if (!formula.list.contains(getFormula(id))) {
-                    formula.list.add(getFormula(id));
-                }
-            } else if(formula.getFormula(id).equals(this.getFormula(id))){
-                formula.list.remove(id);
-            }
-            serializer.write(formula, starredFile);
-
-        } catch (Exception e) {
-            Math.print(e.toString());
+            this.write(file);
+        } else {
+            this.write(file);
         }
     }
 
 
     public void setStarred(int id, boolean starred) {
-        list.get(id).setStarred(starred);
+        this.get(id).setStarred(starred);
     }
 
     public boolean isStarred(int id) {
-        return list.get(id).isStarred();
+        return this.get(id).isStarred();
     }
 
 
@@ -183,13 +172,138 @@ public class Formulas {
     }
 
 
+    /* Override methods */
+    @Override
+    public int size() {
+        return list.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return list.isEmpty();
+
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return list.contains(o);
+    }
+
+    @NonNull
+    @Override
+    public Iterator iterator() {
+        return list.iterator();
+    }
+
+
+    @Override
+    public boolean add(Formula formula) {
+        return list.add(formula);
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return list.remove(o);
+    }
+
+    @Override
+    public boolean addAll(@NonNull Collection c) {
+        return list.addAll(c);
+    }
+
+    @Override
+    public boolean addAll(int index, @NonNull Collection c) {
+        return list.addAll(index, c);
+    }
+
+    @Override
+    public void clear() {
+        list.clear();
+    }
+
+    @Override
+    public Formula get(int index) {
+        return list.get(index);
+    }
+
+    @Override
+    public Formula set(int index, Formula element) {
+        return list.set(index, element);
+    }
+
+    @Override
+    public void add(int index, Formula element) {
+        list.add(index, element);
+    }
+
+
+    @Override
+    public Formula remove(int index) {
+        return list.remove(index);
+    }
+
+    @Override
+    public int indexOf(Object o) {
+        return list.indexOf(o);
+    }
+
+    @Override
+    public int lastIndexOf(Object o) {
+        return list.lastIndexOf(o);
+    }
+
+    @Override
+    public ListIterator listIterator() {
+        return list.listIterator();
+    }
+
+    @NonNull
+    @Override
+    public ListIterator listIterator(int index) {
+        return list.listIterator(index);
+    }
+
+    @NonNull
+    @Override
+    public List subList(int fromIndex, int toIndex) {
+        return list.subList(fromIndex, toIndex);
+    }
+
+    @Override
+    public boolean retainAll(@NonNull Collection c) {
+        return list.retainAll(c);
+    }
+
+    @Override
+    public boolean removeAll(@NonNull Collection c) {
+        return list.removeAll(c);
+    }
+
+    @Override
+    public boolean containsAll(@NonNull Collection c) {
+        return list.containsAll(c);
+    }
+
+    @NonNull
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    @NonNull
+    @Override
+    public Object[] toArray(@NonNull Object[] a) {
+        return new Object[0];
+    }
+
+
+
     /* Formula Class */
     public static class Formula {
         @Element(name = "question")
         private String question;
         @Element(name = "answer")
         private String answer;
-
 
 
         @Element(name = "starred")
@@ -267,7 +381,6 @@ public class Formulas {
         private int endNumber;
 
         public Table(String operation, int startNumber, int endNumber) {
-            Math.print("TABLE");
             this.operation = operation;
             this.startNumber = startNumber;
             this.endNumber = endNumber;

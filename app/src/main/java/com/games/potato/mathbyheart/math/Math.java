@@ -39,7 +39,16 @@ public class Math{
     //TODO: Remove this.
     public static void print(String string){
         if(string != null) {
-            Log.d("LOGGING_HOLA", string);
+            Log.d("LOGGING_POTATO", string);
+        }
+        else{
+            print("null");
+        }
+    }
+
+    public static void error(String string){
+        if(string != null) {
+            Log.e("ERROR_POTATO", string);
         }
         else{
             print("null");
