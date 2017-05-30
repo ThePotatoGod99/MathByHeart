@@ -3,10 +3,7 @@ package com.games.potato.mathbyheart.Activities;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.ActionMenuItem;
-import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,29 +13,9 @@ import android.widget.Toast;
 import com.games.potato.mathbyheart.math.Math;
 import com.games.potato.mathbyheart.R;
 
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.URI;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Stack;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import io.github.kexanie.library.MathView;
 
@@ -46,8 +23,8 @@ import io.github.kexanie.library.MathView;
 public class PracticeActivity extends AppCompatActivity {
     private MathView mathView;
 
-    private Stack<Formulas.Formula> knownFormulas;
-    private Stack<Formulas.Formula> unknownFormulas;
+    private Stack<FormulaList.Formula> knownFormulas;
+    private Stack<FormulaList.Formula> unknownFormulas;
 
     private String dataFileName;
 
@@ -58,7 +35,7 @@ public class PracticeActivity extends AppCompatActivity {
     private ArrayList staredItems;
 
 
-    private Formulas formulas;
+    private FormulaList formulaList;
 
 
     @Override
@@ -105,11 +82,11 @@ public class PracticeActivity extends AppCompatActivity {
 
 
     public void updateData() {
-        formulas = Formulas.read(
+        formulaList = FormulaList.read(
                 new File(getFilesDir(),
                         getString(R.string.path_default_formulas) + "/" + dataFileName)
         );
-        if (formulas == null) {
+        if (formulaList == null) {
             Math.error("ERROR WHILE READING FILE");
             Toast.makeText(PracticeActivity.this, "ERROR WHILE READING FILE: " + dataFileName, Toast.LENGTH_SHORT).show();
             this.onBackPressed();
@@ -126,7 +103,7 @@ public class PracticeActivity extends AppCompatActivity {
 
     public void updateStar() {
         MenuItem star = appToolbar.getMenu().findItem(R.id.action_favorite);
-        if (formulas.isStarred(questionNumber)) {
+        if (formulaList.isStarred(questionNumber)) {
             star.setIcon(R.drawable.ic_star_black_24dp);
         } else {
             star.setIcon(R.drawable.ic_star_border_black_24dp);
@@ -136,10 +113,10 @@ public class PracticeActivity extends AppCompatActivity {
 //                getString(R.string.path_default_formulas) + "/" + "starredFormulas.xml");
 //
 //            /* Write changes to starredFormulas file */
-//        Formulas formula = Formulas.read(file);
+//        FormulaList formula = FormulaList.read(file);
 //        if (formula == null) {
 //            /*If the file doesn't exist, create a new formula object to write in a new XML file */
-//            formula = new Formulas();
+//            formula = new FormulaList();
 //        } else {
 //            /* Delete old file if it exists (it will be replaced with an updated version */
 //            file.delete();
@@ -149,18 +126,18 @@ public class PracticeActivity extends AppCompatActivity {
 //            /* Create the file */
 //            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
 //            bufferedWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-//                    "<formulas>\n" +
-//                    "</formulas>"
+//                    "<formulaList>\n" +
+//                    "</formulaList>"
 //            );//TODO: Change
 //            bufferedWriter.flush();
 //            bufferedWriter.close();
 //        } catch (Exception e) {
-//            System.err.println("Couldn't create file -> Formulas.java toggleStarred()\n" + e.toString());
+//            System.err.println("Couldn't create file -> FormulaList.java toggleStarred()\n" + e.toString());
 //        }
 //
-//        if (formulas.isStarred(questionNumber)) {
-//                formula.addFormula(formulas.getFormula(questionNumber));
-//        } else if (formula.getFormula(questionNumber).equals(formulas.getFormula(questionNumber))) {
+//        if (formulaList.isStarred(questionNumber)) {
+//                formula.addFormula(formulaList.getFormula(questionNumber));
+//        } else if (formula.getFormula(questionNumber).equals(formulaList.getFormula(questionNumber))) {
 //            formula.removeFormulaNumber(questionNumber);
 //        }
 //        formula.write(file);
@@ -177,7 +154,7 @@ public class PracticeActivity extends AppCompatActivity {
             case R.id.action_favorite:
                 File file = new File(getFilesDir(),
                         getString(R.string.path_default_formulas) + "/" + "starredFormulas.xml");
-                formulas.toggleStarred(questionNumber, file);
+                formulaList.toggleStarred(questionNumber, file);
                 updateStar();
                 return true;
 
@@ -192,9 +169,9 @@ public class PracticeActivity extends AppCompatActivity {
         String tag = view.getTag().toString();
 
         if (tag.equals(getString(R.string.btn_known))) {
-            knownFormulas.add(formulas.getFormula(questionNumber));
+            knownFormulas.add(formulaList.getFormula(questionNumber));
         } else if (tag.equals(getString(R.string.btn_unknown))) {
-            unknownFormulas.add(formulas.getFormula(questionNumber));
+            unknownFormulas.add(formulaList.getFormula(questionNumber));
         } else {
             Math.error("ERROR: Wrong button tag: " + tag + getString(R.string.btn_known));
         }
@@ -207,7 +184,7 @@ public class PracticeActivity extends AppCompatActivity {
     }
 
     public void onMathViewPressed(View view) {
-        setFormula(formulas.getOtherSide(questionNumber));
+        setFormula(formulaList.getOtherSide(questionNumber));
     }
 
     /* Getters & Setters */
@@ -219,7 +196,7 @@ public class PracticeActivity extends AppCompatActivity {
     public boolean setFormulaWithID(int id) {
         try {
             mathView.setText(
-                    formulas.getFormulaString(id)
+                    formulaList.getFormulaString(id)
             );
 
         } catch (IndexOutOfBoundsException e) {

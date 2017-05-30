@@ -1,28 +1,16 @@
 package com.games.potato.mathbyheart.Activities;
 
-import android.app.Activity;
-import android.renderscript.ScriptGroup;
 import android.support.annotation.NonNull;
 
-import com.games.potato.mathbyheart.R;
 import com.games.potato.mathbyheart.math.Math;
 
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -33,8 +21,8 @@ import java.util.ListIterator;
  * Created by Simon on 2017-04-16.
  */
 
-@Root(name = "formulas")
-public class Formulas implements List<Formulas.Formula> {
+@Root(name = "formulaList")
+public class FormulaList implements List<FormulaList.Formula> {
     /* Elements */
     @ElementList(required = false, inline = true)
     private ArrayList<Formula> list;
@@ -52,19 +40,19 @@ public class Formulas implements List<Formulas.Formula> {
 
     private File file;
 
-    public Formulas() {
+    public FormulaList() {
         this.list = new ArrayList<>();
     }
 
 
-    public static Formulas read(File file) {
+    public static FormulaList read(File file) {
         try {
             Serializer ser = new Persister();
-            Formulas formulas = ser.read(Formulas.class, file);
-            formulas.file = file;
-            return formulas;
+            FormulaList formulaList = ser.read(FormulaList.class, file);
+            formulaList.file = file;
+            return formulaList;
         } catch (Exception e) {
-            Math.error("ERROR in Formulas.java read(): " + e.toString());
+            Math.error("ERROR in FormulaList.java read(): " + e.toString());
             return null;
         }
     }
