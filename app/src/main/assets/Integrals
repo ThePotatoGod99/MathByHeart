@@ -1,6 +1,0 @@
-$$\int{\frac{du}{a^2+u^2}}dx$$
-$$\frac{1}{a}arctan(\frac{u}{a})+C$$
-$$\int{\frac{du}{\sqrt{a^2-u^2}}}dx$$
-$$arcsin(\frac{u}{a})+C$$
-$$\int{\frac{du}{u\sqrt{u^2-a^2}}}dx$$
-$$\frac{1}{a}arcsec(\frac{u}{a})+C$$

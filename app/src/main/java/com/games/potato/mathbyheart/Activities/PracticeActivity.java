@@ -15,8 +15,6 @@ import com.games.potato.mathbyheart.math.Math;
 import com.games.potato.mathbyheart.R;
 
 import java.io.File;
-import java.text.Normalizer;
-import java.util.ArrayList;
 import java.util.Stack;
 
 import io.github.kexanie.library.MathView;
@@ -37,9 +35,6 @@ public class PracticeActivity extends AppCompatActivity {
 
     private FormulaList formulaList;
     private FormulaList starredFormulaList;
-
-
-    private boolean starredOnly;
 
 
     public void init() {
@@ -91,51 +86,44 @@ public class PracticeActivity extends AppCompatActivity {
 
 
     public boolean readData() {
-        if (dataFileName.equals("starredFormulas.xml")) {//TODO CHANGE
-            starredOnly = true;
-            return findStarredFormulas();
+        formulaList = FormulaList.read(
+                new File(getFilesDir(),
+                        getString(R.string.path_default_formulas) + "/" + dataFileName)
+        );
 
-        } else {
-            formulaList = FormulaList.read(
-                    new File(getFilesDir(),
-                            getString(R.string.path_default_formulas) + "/" + dataFileName)
-            );
-            if (formulaList == null) {
-                Math.error("ERROR WHILE READING FILE");
-                Toast.makeText(PracticeActivity.this, "ERROR WHILE READING FILE: " + dataFileName, Toast.LENGTH_SHORT).show();
-                this.onBackPressed();
-                return false;
-            }
-
-            starredFormulaList = FormulaList.read(
-                    new File(getFilesDir(),
-                            getString(R.string.path_starred_list))
-            );
-            if(starredFormulaList == null){
-                starredFormulaList = new FormulaList();
-            }
-            return true;
+        if (formulaList == null || formulaList.isEmpty()) {
+            Math.error("ERROR WHILE READING FILE");
+            Toast.makeText(PracticeActivity.this, "This file is empty: " + dataFileName, Toast.LENGTH_SHORT).show();
+            this.onBackPressed();
+            return false;
         }
+
+        starredFormulaList = FormulaList.read(
+                new File(getFilesDir(),
+                        getString(R.string.path_starred_list))
+        );
+        if (starredFormulaList == null) {
+            starredFormulaList = new FormulaList();
+        }
+        return true;
+//        }
 
 
     }
 
 
     public boolean updateFormula() {
-//        if(questionNumber != 0 && starredOnly && !formulaList.isStarred(questionNumber - 1)) {
-//            questionNumber--;
-//            formulaList.remove(questionNumber);
-//        }
         return setFormulaWithID(questionNumber);
     }
 
-    public void updateStar(){
+    public void updateStar() {
         Math.print(formulaList.get(0).toString());
 
         updateStar(starredFormulaList.contains(
-                        formulaList.get(questionNumber
-                        )));
+                formulaList.get(questionNumber
+                )));
     }
+
     public void updateStar(boolean toggledOn) {
         MenuItem star = appToolbar.getMenu().findItem(R.id.action_favorite);
         if (toggledOn) {
@@ -143,79 +131,8 @@ public class PracticeActivity extends AppCompatActivity {
         } else {
             star.setIcon(R.drawable.ic_star_border_black_24dp);
         }
-
-//        File file = new File(getFilesDir(),
-//                getString(R.string.path_default_formulas) + "/" + "starredFormulas.xml");
-//
-//            /* Write changes to starredFormulas file */
-//        FormulaList formula = FormulaList.read(file);
-//        if (formula == null) {
-//            /*If the file doesn't exist, create a new formula object to write in a new XML file */
-//            formula = new FormulaList();
-//        } else {
-//            /* Delete old file if it exists (it will be replaced with an updated version */
-//            file.delete();
-//        }
-//
-//        try {
-//            /* Create the file */
-//            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
-//            bufferedWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-//                    "<formulaList>\n" +
-//                    "</formulaList>"
-//            );//TODO: Change
-//            bufferedWriter.flush();
-//            bufferedWriter.close();
-//        } catch (Exception e) {
-//            System.err.println("Couldn't create file -> FormulaList.java toggleStarred()\n" + e.toString());
-//        }
-//
-//        if (formulaList.isStarred(questionNumber)) {
-//                formula.addFormula(formulaList.getFormula(questionNumber));
-//        } else if (formula.getFormula(questionNumber).equals(formulaList.getFormula(questionNumber))) {
-//            formula.removeFormulaNumber(questionNumber);
-//        }
-//        formula.write(file);
     }
 
-
-    public boolean findStarredFormulas() {
-        /* In default formulas */
-        File file = new File(getFilesDir(), getString(R.string.path_default_formulas));
-
-        formulaList = new FormulaList();
-        FormulaList tempFormulaList;
-
-        for (File file1 : file.listFiles()) {
-            tempFormulaList = FormulaList.read(file1);
-            Math.print(file1.toString());
-
-            for (FormulaList.Formula formula : tempFormulaList) {
-                Math.print(formula + " : ");
-                //  if(formula.isStarred()){
-                    /* Adding only the starred formulas to the formulaList */
-                this.formulaList.add(formula);
-                //  }
-            }
-        }
-        Math.print("SDF " + formulaList);
-        for (FormulaList.Formula formula : formulaList) {
-            Math.print("p " + formula.toString());
-        }
-
-        if (this.formulaList.isEmpty()) {
-            Math.print("EMPTY");
-            Toast.makeText(PracticeActivity.this, "No starred formulas", Toast.LENGTH_SHORT).show();
-            this.onBackPressed();
-            return false;
-        }
-
-        return true;
-//        for (File file : getFilesDir().listFiles()) {
-//            Math.print(file.getAbsolutePath() + ": " + file.getName());
-//
-//        }
-    }
 
 
     /* Buttons */
@@ -250,15 +167,15 @@ public class PracticeActivity extends AppCompatActivity {
     }
 
     public void onButtonPressed(View view) {
-        String tag = view.getTag().toString();
+//        String tag = view.getTag().toString();
 
-        if (tag.equals(getString(R.string.btn_known))) {
-            knownFormulas.add(formulaList.getFormula(questionNumber));
-        } else if (tag.equals(getString(R.string.btn_unknown))) {
-            unknownFormulas.add(formulaList.getFormula(questionNumber));
-        } else {
-            Math.error("ERROR: Wrong button tag: " + tag + getString(R.string.btn_known));
-        }
+//        if (tag.equals(getString(R.string.btn_known))) {
+//            knownFormulas.add(formulaList.getFormula(questionNumber));
+//        } else if (tag.equals(getString(R.string.btn_unknown))) {
+//            unknownFormulas.add(formulaList.getFormula(questionNumber));
+//        } else {
+//            Math.error("ERROR: Wrong button tag: " + tag + getString(R.string.btn_known));
+//        }
 
         questionNumber++;
         updateFormula();
