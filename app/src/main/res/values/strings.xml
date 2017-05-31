@@ -6,6 +6,7 @@
     <string name="others">Others</string>
     <string name="action_star">Star this formula</string>
     <string name="path_default_formulas">default_formulas</string>
+    <string name="path_starred_list">default_formulas/starredList.xml</string>
     <string name="title_activity_main">MainActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

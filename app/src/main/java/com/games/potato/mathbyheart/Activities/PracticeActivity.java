@@ -15,6 +15,7 @@ import com.games.potato.mathbyheart.math.Math;
 import com.games.potato.mathbyheart.R;
 
 import java.io.File;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -34,8 +35,8 @@ public class PracticeActivity extends AppCompatActivity {
     Toolbar appToolbar;
 
 
-
     private FormulaList formulaList;
+    private FormulaList starredFormulaList;
 
 
     private boolean starredOnly;
@@ -62,6 +63,8 @@ public class PracticeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        formulaList = new FormulaList();
+        starredFormulaList = new FormulaList();
 
         Toast.makeText(PracticeActivity.this, getIntent().getDataString(), Toast.LENGTH_SHORT).show();
 
@@ -73,7 +76,7 @@ public class PracticeActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        if(readData()){
+        if (readData()) {
             setFormulaWithID(questionNumber);
         }
     }
@@ -103,6 +106,14 @@ public class PracticeActivity extends AppCompatActivity {
                 this.onBackPressed();
                 return false;
             }
+
+            starredFormulaList = FormulaList.read(
+                    new File(getFilesDir(),
+                            getString(R.string.path_starred_list))
+            );
+            if(starredFormulaList == null){
+                starredFormulaList = new FormulaList();
+            }
             return true;
         }
 
@@ -111,16 +122,23 @@ public class PracticeActivity extends AppCompatActivity {
 
 
     public boolean updateFormula() {
-        if(questionNumber != 0 && starredOnly && !formulaList.isStarred(questionNumber - 1)) {
-            questionNumber--;
-            formulaList.remove(questionNumber);
-        }
+//        if(questionNumber != 0 && starredOnly && !formulaList.isStarred(questionNumber - 1)) {
+//            questionNumber--;
+//            formulaList.remove(questionNumber);
+//        }
         return setFormulaWithID(questionNumber);
     }
 
-    public void updateStar() {
+    public void updateStar(){
+        Math.print(formulaList.get(0).toString());
+
+        updateStar(starredFormulaList.contains(
+                        formulaList.get(questionNumber
+                        )));
+    }
+    public void updateStar(boolean toggledOn) {
         MenuItem star = appToolbar.getMenu().findItem(R.id.action_favorite);
-        if (formulaList.isStarred(questionNumber)) {
+        if (toggledOn) {
             star.setIcon(R.drawable.ic_star_black_24dp);
         } else {
             star.setIcon(R.drawable.ic_star_border_black_24dp);
@@ -168,24 +186,24 @@ public class PracticeActivity extends AppCompatActivity {
         formulaList = new FormulaList();
         FormulaList tempFormulaList;
 
-        for(File file1 : file.listFiles()){
+        for (File file1 : file.listFiles()) {
             tempFormulaList = FormulaList.read(file1);
             Math.print(file1.toString());
 
-            for(FormulaList.Formula formula : tempFormulaList){
-                Math.print(formula + " : " );
-                if(formula.isStarred()){
+            for (FormulaList.Formula formula : tempFormulaList) {
+                Math.print(formula + " : ");
+                //  if(formula.isStarred()){
                     /* Adding only the starred formulas to the formulaList */
-                    this.formulaList.add(formula);
-                }
+                this.formulaList.add(formula);
+                //  }
             }
         }
         Math.print("SDF " + formulaList);
-        for(FormulaList.Formula formula : formulaList){
+        for (FormulaList.Formula formula : formulaList) {
             Math.print("p " + formula.toString());
         }
 
-        if(this.formulaList.isEmpty()){
+        if (this.formulaList.isEmpty()) {
             Math.print("EMPTY");
             Toast.makeText(PracticeActivity.this, "No starred formulas", Toast.LENGTH_SHORT).show();
             this.onBackPressed();
@@ -208,9 +226,20 @@ public class PracticeActivity extends AppCompatActivity {
             case R.id.action_favorite:
                 File file = new File(getFilesDir(),
                         getString(R.string.path_default_formulas) + "/" + "starredFormulas.xml");
-                formulaList.toggleStarred(questionNumber, file);
-                updateStar();
+
+
+                boolean toggledOn = false;
+                if (!starredFormulaList.remove(formulaList.get(questionNumber))) {
+                    /* If starredFormulaList contains the current question, remove it. Else, add it */
+                    starredFormulaList.add(formulaList.get(questionNumber));
+                    toggledOn = true;
+                }
+
+
+                updateStar(toggledOn);
                 setFormulaWithID(questionNumber);
+
+                starredFormulaList.write(starredFormulaList.getSourceFile());
                 return true;
 
             default:

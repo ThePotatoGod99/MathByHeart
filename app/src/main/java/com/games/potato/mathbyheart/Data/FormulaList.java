@@ -30,9 +30,6 @@ public class FormulaList implements List<FormulaList.Formula> {
     private ArrayList<Formula> list;
     @Element(name = "table", required = false)
     private Table table;
-    @ElementList(name = "starredList", required = false)
-    private ArrayList<String> starredList;
-
 
     private boolean questionsFirst = true; /* Should show questions first */
     private boolean showingQuestion = true; /* Last formula returned was a question */
@@ -64,7 +61,6 @@ public class FormulaList implements List<FormulaList.Formula> {
                             formulaList.add(new Formula(
                                     operation,
                                     answer,
-                                    formulaList.starredList.contains(operation),
                                     file
                                     ));
                         }
@@ -96,6 +92,10 @@ public class FormulaList implements List<FormulaList.Formula> {
         for(Formula formula : this){
             formula.setSourceFile(file);
         }
+    }
+
+    public File getSourceFile(){
+        return this.sourceFile;
     }
 
     public String getFormulaString(int id) {
@@ -142,40 +142,6 @@ public class FormulaList implements List<FormulaList.Formula> {
 
     public void setQuestionsFirst(boolean questionsFirst) {
         this.questionsFirst = questionsFirst;
-    }
-
-
-    public void toggleStarred(int id, File starredFile) {
-        setStarred(id, !isStarred(id));
-        if (table != null) {
-                /* If table exists, we must add the starred formulas at the end of the table XML sourceFile */
-            if (!isStarred(id)) {
-                starredList.remove(getFormula(id).getQuestion());
-            } else {
-                starredList.add(getFormula(id).getQuestion());
-            }
-            this.write(sourceFile);
-        } else {
-            this.write(sourceFile);
-        }
-    }
-
-
-    public void setStarred(int id, boolean starred) {
-        this.get(id).setStarred(starred);
-    }
-
-    public boolean isStarred(int id) {
-        return this.get(id).isStarred();
-    }
-
-
-    public ArrayList<String> getStarredList() {
-        return starredList;
-    }
-
-    public void setStarredList(ArrayList<String> starredList) {
-        this.starredList = starredList;
     }
 
 
@@ -311,17 +277,12 @@ public class FormulaList implements List<FormulaList.Formula> {
         @Element(name = "answer")
         private String answer;
 
-
-        @Element(name = "starred")
-        private boolean starred = false;
-
         private File sourceFile;
 
 
-        public Formula(String question, String answer, boolean starred, File sourceFile) {
+        public Formula(String question, String answer, File sourceFile) {
             this.question = question;
             this.answer = answer;
-            this.starred = starred;
             this.sourceFile = sourceFile;
         }
 
@@ -353,20 +314,12 @@ public class FormulaList implements List<FormulaList.Formula> {
             this.answer = answer;
         }
 
-        public boolean isStarred() {
-            return starred;
-        }
-
-        public void setStarred(boolean starred) {
-            this.starred = starred;
-        }
 
         @Override
         public String toString() {
             return "Formula{" +
                     "question='" + question + '\'' +
                     ", answer='" + answer + '\'' +
-                    ", starred=" + starred +
                     '}';
         }
 
@@ -377,7 +330,6 @@ public class FormulaList implements List<FormulaList.Formula> {
 
             Formula formula = (Formula) o;
 
-            if (starred != formula.starred) return false;
             if (question != null ? !question.equals(formula.question) : formula.question != null)
                 return false;
             return answer != null ? answer.equals(formula.answer) : formula.answer == null;
