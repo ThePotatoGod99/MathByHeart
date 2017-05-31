@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity
             firstRun();
             preferences.edit().putBoolean("first_start", false).commit();
         }
-        //   reset();//TODO: delete
 
         File file = new File(getFilesDir(), "default_formulas");
         list(file);

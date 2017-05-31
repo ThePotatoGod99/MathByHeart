@@ -11,6 +11,7 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
 import java.io.File;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -36,7 +37,8 @@ public class FormulaList implements List<FormulaList.Formula> {
     private boolean questionsFirst = true; /* Should show questions first */
     private boolean showingQuestion = true; /* Last formula returned was a question */
 
-    private File file;
+
+    private File sourceFile;
 
     public FormulaList() {
         this.list = new ArrayList<>();
@@ -47,7 +49,29 @@ public class FormulaList implements List<FormulaList.Formula> {
         try {
             Serializer ser = new Persister();
             FormulaList formulaList = ser.read(FormulaList.class, file);
-            formulaList.file = file;
+
+            formulaList.sourceFile = file;
+            formulaList.setSourceFile(file);
+
+            if (formulaList.table != null) {
+                if (formulaList.isEmpty()) {
+                    String operation = "";
+                    String answer = "";
+                    for (int x = formulaList.table.getStartNumber(); x <= formulaList.table.getEndNumber(); x++) {
+                        for (int y = formulaList.table.getStartNumber(); y <= formulaList.table.getEndNumber(); y++) {
+                            operation = "$$" + x + formulaList.table.getOperation() + y + "$$";
+                            answer = "$$" + formulaList.table.getAnswer(x, y).toString() + "$$";
+                            formulaList.add(new Formula(
+                                    operation,
+                                    answer,
+                                    formulaList.starredList.contains(operation),
+                                    file
+                                    ));
+                        }
+                    }
+                }
+            }
+
             return formulaList;
         } catch (Exception e) {
             Math.error("ERROR in FormulaList.java read(): " + e.toString());
@@ -66,6 +90,14 @@ public class FormulaList implements List<FormulaList.Formula> {
 
 
     /* Getters & Setters */
+
+    public void setSourceFile(File file){
+        /* Changes the source file for all formulas in the list */
+        for(Formula formula : this){
+            formula.setSourceFile(file);
+        }
+    }
+
     public String getFormulaString(int id) {
         return getFormulaString(id, questionsFirst);
     }
@@ -80,24 +112,14 @@ public class FormulaList implements List<FormulaList.Formula> {
     }
 
     public Formula getFormula(int id) {
-        if (table != null) {
-            if (this.isEmpty()) {
-                String operation = "";
-                String answer = "";
-                for (int x = table.getStartNumber(); x <= table.getEndNumber(); x++) {
-                    for (int y = table.getStartNumber(); y <= table.getEndNumber(); y++) {
-                        operation = "$$" + x + table.getOperation() + y + "$$";
-                        answer = "$$" + table.getAnswer(x, y).toString() + "$$";
-                        this.add(new Formula(
-                                operation,
-                                answer,
-                                starredList.contains(operation)
-                        ));
-                    }
-                }
-            }
+        if (!this.isEmpty()) {
+
+
+            return this.get(id);
+        } else {
+            Math.error("ERROR: Array Is Empty");
+            return null;
         }
-        return this.get(id);
     }
 
     public boolean addFormula(Formula formula) {
@@ -126,15 +148,15 @@ public class FormulaList implements List<FormulaList.Formula> {
     public void toggleStarred(int id, File starredFile) {
         setStarred(id, !isStarred(id));
         if (table != null) {
-                /* If table exists, we must add the starred formulas at the end of the table XML file */
+                /* If table exists, we must add the starred formulas at the end of the table XML sourceFile */
             if (!isStarred(id)) {
                 starredList.remove(getFormula(id).getQuestion());
             } else {
                 starredList.add(getFormula(id).getQuestion());
             }
-            this.write(file);
+            this.write(sourceFile);
         } else {
-            this.write(file);
+            this.write(sourceFile);
         }
     }
 
@@ -282,7 +304,6 @@ public class FormulaList implements List<FormulaList.Formula> {
     }
 
 
-
     /* Formula Class */
     public static class Formula {
         @Element(name = "question")
@@ -294,17 +315,27 @@ public class FormulaList implements List<FormulaList.Formula> {
         @Element(name = "starred")
         private boolean starred = false;
 
+        private File sourceFile;
 
-        public Formula(String question, String answer, boolean starred) {
+
+        public Formula(String question, String answer, boolean starred, File sourceFile) {
             this.question = question;
             this.answer = answer;
             this.starred = starred;
+            this.sourceFile = sourceFile;
         }
 
         private Formula() {
         }
 
         /* Getters & Setters */
+        public void setSourceFile(File sourceFile){
+            this.sourceFile = sourceFile;
+        }
+
+        public File getSourceFile() {
+            return sourceFile;
+        }
 
         public String getQuestion() {
             return question;

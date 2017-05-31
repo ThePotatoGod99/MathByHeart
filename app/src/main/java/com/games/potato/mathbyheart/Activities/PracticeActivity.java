@@ -38,6 +38,9 @@ public class PracticeActivity extends AppCompatActivity {
     private FormulaList formulaList;
 
 
+    private boolean starredOnly;
+
+
     public void init() {
         setContentView(R.layout.activity_practice);
 
@@ -86,6 +89,7 @@ public class PracticeActivity extends AppCompatActivity {
 
     public boolean readData() {
         if (dataFileName.equals("starredFormulas.xml")) {//TODO CHANGE
+            starredOnly = true;
             return findStarredFormulas();
 
         } else {
@@ -107,6 +111,10 @@ public class PracticeActivity extends AppCompatActivity {
 
 
     public boolean updateFormula() {
+        if(questionNumber != 0 && starredOnly && !formulaList.isStarred(questionNumber - 1)) {
+            questionNumber--;
+            formulaList.remove(questionNumber);
+        }
         return setFormulaWithID(questionNumber);
     }
 
@@ -173,6 +181,10 @@ public class PracticeActivity extends AppCompatActivity {
             }
         }
         Math.print("SDF " + formulaList);
+        for(FormulaList.Formula formula : formulaList){
+            Math.print("p " + formula.toString());
+        }
+
         if(this.formulaList.isEmpty()){
             Math.print("EMPTY");
             Toast.makeText(PracticeActivity.this, "No starred formulas", Toast.LENGTH_SHORT).show();
@@ -198,6 +210,7 @@ public class PracticeActivity extends AppCompatActivity {
                         getString(R.string.path_default_formulas) + "/" + "starredFormulas.xml");
                 formulaList.toggleStarred(questionNumber, file);
                 updateStar();
+                setFormulaWithID(questionNumber);
                 return true;
 
             default:
