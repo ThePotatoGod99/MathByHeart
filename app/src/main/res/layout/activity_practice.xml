@@ -28,8 +28,7 @@
         android:layout_marginStart="8dp"
         android:background="@android:color/holo_red_dark"
         android:onClick="onButtonPressed"
-        android:tag="@string/btn_unknown"
-        android:text="Button"
+        android:text="@string/btn_1_label"
         app:layout_constraintBaseline_toBaselineOf="@+id/button2"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -42,8 +41,7 @@
         android:layout_marginRight="8dp"
         android:background="@android:color/holo_green_dark"
         android:onClick="onButtonPressed"
-        android:tag="@string/btn_known"
-        android:text="Button"
+        android:text="@string/btn_2_label"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 

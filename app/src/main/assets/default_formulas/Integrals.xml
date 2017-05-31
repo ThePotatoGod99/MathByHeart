@@ -1,21 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <formulaList>
+
+    <formula>
+        <question>$$\int{u^n}dx$$</question>
+        <answer>$$\frac{u^{n+1}}{n+1}+C$$</answer>
+    </formula>
+
+
+    <formula>
+        <question>$$\int{\frac{1}{u}}du$$</question>
+        <answer>$$ln|u|+C$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\int{e^u}du$$</question>
+        <answer>$$e^u+c$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\int{b^u}du$$</question>
+        <answer>$$\frac{b^u}{ln b}+c$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\int{sin (u) }  du$$</question>
+        <answer>$$-cos(u)+C$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\int{cos (u) }  du$$</question>
+        <answer>$$sin(u)+C$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\int{sec^2 (u) }  du$$</question>
+        <answer>$$tan(u)+C$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\int{cosec^2 (u) }  du$$</question>
+        <answer>$$-cot(u)+C$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\int{sec (u) tan (u)}  du$$</question>
+        <answer>$$sec(u)+C$$</answer>
+    </formula>
+
+
+    <formula>
+        <question>$$\int{cosec (u) cot (u)}  du$$</question>
+        <answer>$$-cosec(u)+C$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\int{tan (u) }  du$$</question>
+        <answer>$$ln{|sec(u)|}+C$$</answer>
+    </formula>
+
+
+    <formula>
+        <question>$$\int{cot (u) }  du$$</question>
+        <answer>$$ln{|sin(u)|} + C$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\int{sec (u) }  du$$</question>
+        <answer>$$ln{|sec(u) + tan(u)|} + C$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\int{cosec (u) }  du$$</question>
+        <answer>$$ln{|cosec(u) - cot(u)|} + C$$</answer>
+    </formula>
+
     <formula>
         <question>$$\int{\frac{du}{a^2+u^2}}dx$$</question>
         <answer>$$\frac{1}{a}arctan(\frac{u}{a})+C$$</answer>
-        <starred>false</starred>
     </formula>
 
     <formula>
         <question>$$\int{\frac{du}{\sqrt{a^2-u^2}}}dx$$</question>
         <answer>$$arcsin(\frac{u}{a})+C$$</answer>
-        <starred>false</starred>
     </formula>
 
     <formula>
         <question>$$\int{\frac{du}{u\sqrt{u^2-a^2}}}dx$$</question>
         <answer>$$\frac{1}{a}arcsec(\frac{u}{a})+C$$</answer>
-        <starred>false</starred>
     </formula>
 
 </formulaList>

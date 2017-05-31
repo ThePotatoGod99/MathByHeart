@@ -86,15 +86,15 @@ public class MainActivity extends AppCompatActivity
         ListView listView = (ListView) findViewById(R.id.list_view);
 
         String items[] = {getString(R.string.integrals),
+                "starredList",
                 getString(R.string.derivatives),
                 getString(R.string.multiplications),
-                getString(R.string.others),
-                "starredFormulas"};
+                getString(R.string.others),};
         String formulas[] = {"$$\\int{\\frac{1}{1+x^2}}dx$$",
+                "⭐ Starred Formulas ⭐",
                 "$$\\frac{d}{du}(\\frac{u}{v})$$",
                 "$$3 \\times 4$$",
-                "$$\\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$",
-                "xd"};
+                "$$\\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$",};
         CustomList customList = new CustomList(this, items, formulas);
         listView.setAdapter(customList);
 
@@ -246,13 +246,13 @@ public class MainActivity extends AppCompatActivity
 
 
         switch (id) {
-            case R.id.action_add_folder:
+            case R.id.action_reset:
                 break;
             case R.id.starred:
 
                 break;
         }
-        if (id == R.id.action_add_folder) {
+        if (id == R.id.action_reset) {
             Toast.makeText(this, "reset()", Toast.LENGTH_SHORT).show();
             reset();
             //  menu.add(item.getGroupId(), Menu.NONE, , "hola");
