@@ -2,7 +2,7 @@ package com.games.potato.mathbyheart.Data;
 
 import android.support.annotation.NonNull;
 
-import com.games.potato.mathbyheart.math.Math;
+import com.games.potato.mathbyheart.math.Xd;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -11,7 +11,6 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
 import java.io.File;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -70,7 +69,7 @@ public class FormulaList implements List<FormulaList.Formula> {
 
             return formulaList;
         } catch (Exception e) {
-            Math.error("ERROR in FormulaList.java read(): " + e.toString());
+            Xd.error("ERROR in FormulaList.java read(): " + e.toString());
             return null;
         }
     }
@@ -117,7 +116,7 @@ public class FormulaList implements List<FormulaList.Formula> {
 
             return this.get(id);
         } else {
-            Math.error("ERROR: Array Is Empty");
+            Xd.error("ERROR: Array Is Empty");
             return null;
         }
     }

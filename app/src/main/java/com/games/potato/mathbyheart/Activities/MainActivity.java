@@ -10,7 +10,6 @@ import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -32,7 +31,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import com.games.potato.mathbyheart.math.Math;
+import com.games.potato.mathbyheart.math.Xd;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import io.github.kexanie.library.MathView;
 
@@ -48,11 +50,19 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+
+        MobileAds.initialize(this, "ca-app-pub-6790111268050062~2012680831");
+
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("FB2944BD719884A6E6319E924DCEFB28").build();
+        mAdView.loadAd(adRequest);
+
+
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.setDrawerListener(toggle);
+//        toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -61,7 +71,7 @@ public class MainActivity extends AppCompatActivity
         preferences = getSharedPreferences(getApplicationContext().getPackageName(), MODE_PRIVATE);
 
         if (preferences.getBoolean("first_start", true)) {
-            Math.print("FirstRun");
+            Xd.print("FirstRun");
             firstRun();
             preferences.edit().putBoolean("first_start", false).commit();
         }
@@ -70,14 +80,14 @@ public class MainActivity extends AppCompatActivity
         list(file);
 
 
-        Math.print("\n\nReadingXML\n");
+        Xd.print("\n\nReadingXML\n");
         try {
             BufferedReader bf = new BufferedReader(new FileReader(new File(getFilesDir(), "default_formulas/starredFormulas.xml")));
             String line;
             while ((line = bf.readLine()) != null) {
-                Math.print(line);
+                Xd.print(line);
             }
-            Math.print("ADSF");
+            Xd.print("ADSF");
         } catch (IOException e) {
 
         }
@@ -120,25 +130,25 @@ public class MainActivity extends AppCompatActivity
 
     public void list(File file) {
         for (String string : file.list()) {
-            Math.print(string);
+            Xd.print(string);
         }
-        Math.print("\n-----------\n");
+        Xd.print("\n-----------\n");
     }
 
 
     public void firstRun() {
         copyFileOrDir(getString(R.string.path_default_formulas));
-        Math.print("\nEnd first run\n");
+        Xd.print("\nEnd first run\n");
     }
 
 
     //TODO: Move to other file
 
     public void reset() {
-        Math.print("FirstRun: \n\n");
+        Xd.print("FirstRun: \n\n");
         File file = new File(getFilesDir(), "default_formulas");
 
-        Math.print("Deleting these files: ");
+        Xd.print("Deleting these files: ");
         list(file);
 
         for (File file1 : file.listFiles()) {
@@ -149,11 +159,11 @@ public class MainActivity extends AppCompatActivity
 
 
         firstRun();
-        Math.print("\nFiles:");
+        Xd.print("\nFiles:");
         list(file);
 
 
-        Math.print("\n\nApp Starting \n\n\n");
+        Xd.print("\n\nApp Starting \n\n\n");
 
 
     }
@@ -175,7 +185,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         } catch (IOException e) {
-            Math.print("IOException " + e);
+            Xd.print("IOException " + e);
         }
     }
 
@@ -198,7 +208,7 @@ public class MainActivity extends AppCompatActivity
             bufferedWriter.close();
 
         } catch (Exception e) {
-            Math.print("EXCEPTION " + e);
+            Xd.print("EXCEPTION " + e);
         }
 
     }

@@ -7,7 +7,7 @@ import android.util.Log;
  * Created by Simon Tran on 2017-04-13.
  */
 
-public class Math{
+public class Xd {
     public static boolean isNumber(Character character){
         return (character >= '0' && character <= '9');
     }

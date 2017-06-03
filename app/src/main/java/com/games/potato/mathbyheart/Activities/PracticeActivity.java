@@ -11,10 +11,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.games.potato.mathbyheart.Data.FormulaList;
-import com.games.potato.mathbyheart.math.Math;
+import com.games.potato.mathbyheart.math.Xd;
 import com.games.potato.mathbyheart.R;
 
 import java.io.File;
+import java.util.Random;
 import java.util.Stack;
 
 import io.github.kexanie.library.MathView;
@@ -92,7 +93,7 @@ public class PracticeActivity extends AppCompatActivity {
         );
 
         if (formulaList == null || formulaList.isEmpty()) {
-            Math.error("ERROR WHILE READING FILE");
+            Xd.error("ERROR WHILE READING FILE");
             Toast.makeText(PracticeActivity.this, "This file is empty: " + dataFileName, Toast.LENGTH_SHORT).show();
             this.onBackPressed();
             return false;
@@ -106,8 +107,29 @@ public class PracticeActivity extends AppCompatActivity {
             starredFormulaList = new FormulaList();
         }
         return true;
-//        }
 
+
+    }
+
+    public void randomize() {
+        FormulaList temp = new FormulaList();
+        Random random = new Random();
+        int number = 0;
+        while (!formulaList.isEmpty()) {
+
+            if (formulaList.size() == 1) {
+                number = 0;
+            } else {
+                number = (int) (Math.random() * formulaList.size());
+
+            }
+            temp.add(formulaList.remove(number));
+        }
+
+        formulaList = temp;
+        questionNumber = 0;
+        updateFormula();
+        updateStar();
 
     }
 
@@ -117,7 +139,7 @@ public class PracticeActivity extends AppCompatActivity {
     }
 
     public void updateStar() {
-        Math.print(formulaList.get(0).toString());
+        Xd.print(formulaList.get(0).toString());
 
         updateStar(starredFormulaList.contains(
                 formulaList.get(questionNumber
@@ -159,29 +181,32 @@ public class PracticeActivity extends AppCompatActivity {
                 starredFormulaList.write(starredFormulaList.getSourceFile());
                 return true;
 
+            case R.id.action_randomize:
+                randomize();
+                return true;
+
+
             default:
-                Math.error("ERROR: Action not recognised in onOptionsItemSelected(): " + item.toString() + " id: " + item.getItemId());
+                Xd.error("ERROR: Action not recognised in onOptionsItemSelected(): " + item.toString() + " id: " + item.getItemId());
                 return super.onOptionsItemSelected(item);
         }
 
     }
 
     public void onButtonPressed(View view) {
-//        String tag = view.getTag().toString();
+        String tag = view.getTag().toString();
 
-//        if (tag.equals(getString(R.string.btn_known))) {
-//            knownFormulas.add(formulaList.getFormula(questionNumber));
-//        } else if (tag.equals(getString(R.string.btn_unknown))) {
-//            unknownFormulas.add(formulaList.getFormula(questionNumber));
-//        } else {
-//            Math.error("ERROR: Wrong button tag: " + tag + getString(R.string.btn_known));
-//        }
+        if (tag.equals(getString(R.string.btn_2_label))) {
+            questionNumber++;
+        } else if (tag.equals(getString(R.string.btn_1_label))) {
+            questionNumber--;
+            if (questionNumber < 0) {
+                questionNumber = formulaList.size() - 1;
+            }
+        }
 
-        questionNumber++;
         updateFormula();
         updateStar();
-
-
     }
 
     public void onMathViewPressed(View view) {
