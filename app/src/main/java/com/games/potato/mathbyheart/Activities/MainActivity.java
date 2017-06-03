@@ -74,15 +74,10 @@ public class MainActivity extends AppCompatActivity
 
         if (preferences.getBoolean("first_start", true)) {
             Xd.print("FirstRun");
-            firstRun();
+            reset();
             preferences.edit().putBoolean("first_start", false).commit();
         }
 
-        File file = new File(getFilesDir(), "default_formulas");
-        list(file);
-
-
-        Xd.print("\n\nReadingXML\n");
         try {
             BufferedReader bf = new BufferedReader(new FileReader(new File(getFilesDir(), "default_formulas/starredFormulas.xml")));
             String line;
@@ -113,7 +108,7 @@ public class MainActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 String string = parent.getItemAtPosition(position).toString();
-                if(string.equals("⭐")){
+                if (string.equals("⭐")) {
                     string = "starredList";
                 }
                 Intent practiceActivityIntent = new Intent(MainActivity.this, PracticeActivity.class);
@@ -151,19 +146,22 @@ public class MainActivity extends AppCompatActivity
         Xd.print("FirstRun: \n\n");
         File file = new File(getFilesDir(), "default_formulas");
 
-        Xd.print("Deleting these files: ");
-        list(file);
+        if (file.listFiles() != null) {
+            Xd.print("Deleting these files: ");
 
-        for (File file1 : file.listFiles()) {
-            file1.delete();
+            for (File file1 : file.listFiles()) {
+                Xd.print(file1.toString());
+                file1.delete();
+            }
+
+            list(file);
         }
-
-        list(file);
-
 
         firstRun();
         Xd.print("\nFiles:");
-        list(file);
+        if (file != null) {
+            list(file);
+        }
 
 
         Xd.print("\n\nApp Starting \n\n\n");
@@ -242,12 +240,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if(id == R.id.action_reset){
+        if (id == R.id.action_reset) {
             reset();
-        }
-
-        if (id == R.id.action_settings) {
-            return true;
         }
 
         return super.onOptionsItemSelected(item);

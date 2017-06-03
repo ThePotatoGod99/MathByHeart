@@ -72,6 +72,8 @@ public class PracticeActivity extends AppCompatActivity {
 
         if (readData()) {
             setFormulaWithID(questionNumber);
+        } else {
+            finish();
         }
     }
 
@@ -79,7 +81,9 @@ public class PracticeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.practice_menu, menu);
-        updateStar();
+        if (!isFinishing()) {
+            updateStar();
+        }
         return true;
     }
 
@@ -93,7 +97,8 @@ public class PracticeActivity extends AppCompatActivity {
         if (formulaList == null || formulaList.isEmpty()) {
             Xd.error("ERROR WHILE READING FILE");
             Toast.makeText(PracticeActivity.this, "No formulas in this section", Toast.LENGTH_SHORT).show();
-            this.onBackPressed();
+//            finish();
+//            this.onBackPressed();
             return false;
         }
 
