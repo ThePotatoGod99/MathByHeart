@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity
         String items[] = {getString(R.string.integrals),
                 getString(R.string.derivatives),
                 getString(R.string.multiplications),
-                "starredList"};
+                "⭐"};
         String formulas[] = {"$$\\int{\\frac{1}{1+x^2}}dx$$",
                 "$$\\frac{d}{du}(\\frac{u}{v})$$",
                 "$$3 \\times 4$$",
@@ -111,9 +111,13 @@ public class MainActivity extends AppCompatActivity
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent practiceActivityIntent = new Intent(MainActivity.this, PracticeActivity.class);
 
-                practiceActivityIntent.setData(Uri.parse(parent.getItemAtPosition(position).toString() + ".xml"));
+                String string = parent.getItemAtPosition(position).toString();
+                if(string.equals("⭐")){
+                    string = "starredList";
+                }
+                Intent practiceActivityIntent = new Intent(MainActivity.this, PracticeActivity.class);
+                practiceActivityIntent.setData(Uri.parse(string + ".xml"));
                 startActivity(practiceActivityIntent);
             }
         });
