@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<formulaList>
+
+    <formula>
+        <question>$$\frac{d}{dx}c$$</question>
+        <answer>$$0$$</answer>
+    </formula>
+
+
+    <formula>
+        <question>$$\frac{d}{dx}f(x)$$</question>
+        <answer>$$\lim_{\Delta x\to0}\frac{f(x+\Delta x)-f(x)}{\Delta x}$$</answer>
+    </formula>
+
+
+    <formula>
+        <question>$$\frac{d}{dx}k*f(x)$$</question>
+        <answer>$$k\frac{df(x)}{dx}$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\frac{du^n}{dx}$$</question>
+        <answer>$$nu^{n-1}*u'$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\frac{d}{dx}(u+v)$$</question>
+        <answer>$$\frac{du}{dx}+\frac{dv}{dx}$$</answer>
+    </formula>
+    <formula>
+        <question>$$\frac{d}{dx}(uv)$$</question>
+        <answer>$$u'v+uv'$$</answer>
+    </formula>
+    <formula>
+        <question>$$\frac{d}{dx}\frac{u}{v}$$</question>
+        <answer>$$\frac{u'v-uv'}{v^2}$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\frac{dy}{dx}$$</question>
+        <answer>$$\frac{dy}{du}*\frac{du}{dx}$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\frac{d}{dx}sinu$$</question>
+        <answer>$$cos(u)*u'$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\frac{d}{dx}cosu$$</question>
+        <answer>$$-sin(u)*u'$$</answer>
+    </formula>
+    <formula>
+        <question>$$\frac{d}{dx}tanu$$</question>
+        <answer>$$sec^2(u)*u'$$</answer>
+    </formula>
+    <formula>
+        <question>$$\frac{d}{dx}cotu$$</question>
+        <answer>$$-cosec^2(u)*u'$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\frac{d}{dx}secu$$</question>
+        <answer>$$sec(u)tan(u)*u'$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\frac{d}{dx}cosecu$$</question>
+        <answer>$$-cosec(u)cot(u)*u'$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\frac{d}{dx}arcsin(u)$$</question>
+        <answer>$$\frac{u'}{\sqrt{1-u^2}}$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\frac{d}{dx}arccos(u)$$</question>
+        <answer>$$\frac{-u'}{\sqrt{1-u^2}}$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\frac{d}{dx}arctan(u)$$</question>
+        <answer>$$\frac{u'}{1+u^2}$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\frac{d}{dx}arccot(u)$$</question>
+        <answer>$$\frac{-u'}{1+u^2}$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\frac{d}{dx}arcsec(u)$$</question>
+        <answer>$$\frac{u'}{|u|\sqrt{u^2-1}}$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\frac{d}{dx}arccosec(u)$$</question>
+        <answer>$$\frac{-u'}{|u|\sqrt{u^2-1}}$$</answer>
+    </formula>
+
+    <formula>
+        <question>$$\frac{d}{dx}lnu$$</question>
+        <answer>$$\frac{u'}{u}$$</answer>
+    </formula>
+    <formula>
+        <question>$$\frac{d}{dx}\log_bu$$</question>
+        <answer>$$\frac{u'}{u*lnb}$$</answer>
+    </formula>
+    <formula>
+        <question>$$\frac{d}{dx}e^u$$</question>
+        <answer>$$e^u*u'$$</answer>
+    </formula>
+    <formula>
+        <question>$$\frac{d}{dx}b^u$$</question>
+        <answer>$$b^ulnb*u'$$</answer>
+    </formula>
+</formulaList>
+
+
+

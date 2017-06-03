@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -96,15 +98,13 @@ public class MainActivity extends AppCompatActivity
         ListView listView = (ListView) findViewById(R.id.list_view);
 
         String items[] = {getString(R.string.integrals),
-                "starredList",
                 getString(R.string.derivatives),
                 getString(R.string.multiplications),
-                getString(R.string.others),};
+                "starredList"};
         String formulas[] = {"$$\\int{\\frac{1}{1+x^2}}dx$$",
-                "⭐ Starred Formulas ⭐",
                 "$$\\frac{d}{du}(\\frac{u}{v})$$",
                 "$$3 \\times 4$$",
-                "$$\\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$",};
+                "$$\\star\\text{Starred Formulas}\\star$$"};
         CustomList customList = new CustomList(this, items, formulas);
         listView.setAdapter(customList);
 
@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity
     //TODO: Move to other file
 
     public void reset() {
+        Toast.makeText(this, "Reset to default", Toast.LENGTH_SHORT).show();
         Xd.print("FirstRun: \n\n");
         File file = new File(getFilesDir(), "default_formulas");
 
@@ -239,6 +240,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        if(id == R.id.action_reset){
+            reset();
+        }
+
         if (id == R.id.action_settings) {
             return true;
         }
@@ -263,10 +268,10 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
         if (id == R.id.action_reset) {
-            Toast.makeText(this, "reset()", Toast.LENGTH_SHORT).show();
             reset();
             //  menu.add(item.getGroupId(), Menu.NONE, , "hola");
         }
+
         /*if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
