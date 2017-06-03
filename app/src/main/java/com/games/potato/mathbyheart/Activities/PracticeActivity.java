@@ -62,8 +62,6 @@ public class PracticeActivity extends AppCompatActivity {
         formulaList = new FormulaList();
         starredFormulaList = new FormulaList();
 
-        Toast.makeText(PracticeActivity.this, getIntent().getDataString(), Toast.LENGTH_SHORT).show();
-
         dataFileName = getIntent().getDataString();
         init();
     }
@@ -94,7 +92,7 @@ public class PracticeActivity extends AppCompatActivity {
 
         if (formulaList == null || formulaList.isEmpty()) {
             Xd.error("ERROR WHILE READING FILE");
-            Toast.makeText(PracticeActivity.this, "This file is empty: " + dataFileName, Toast.LENGTH_SHORT).show();
+            Toast.makeText(PracticeActivity.this, "No formulas in this section", Toast.LENGTH_SHORT).show();
             this.onBackPressed();
             return false;
         }

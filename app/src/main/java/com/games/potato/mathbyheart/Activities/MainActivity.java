@@ -111,8 +111,6 @@ public class MainActivity extends AppCompatActivity
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Toast.makeText(MainActivity.this, "ADFASDF " + position, Toast.LENGTH_SHORT).show();
-
                 Intent practiceActivityIntent = new Intent(MainActivity.this, PracticeActivity.class);
 
                 practiceActivityIntent.setData(Uri.parse(parent.getItemAtPosition(position).toString() + ".xml"));
