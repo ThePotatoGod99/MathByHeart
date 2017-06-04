@@ -2,7 +2,7 @@
 <formulaList>
 
     <formula>
-        <question>$$\int{u^n}dx$$</question>
+        <question>$$\int{u^n}du$$</question>
         <answer>$$\frac{u^{n+1}}{n+1}+C$$</answer>
     </formula>
 
@@ -75,17 +75,17 @@
     </formula>
 
     <formula>
-        <question>$$\int{\frac{du}{a^2+u^2}}dx$$</question>
+        <question>$$\int{\frac{du}{a^2+u^2}}$$</question>
         <answer>$$\frac{1}{a}arctan(\frac{u}{a})+C$$</answer>
     </formula>
 
     <formula>
-        <question>$$\int{\frac{du}{\sqrt{a^2-u^2}}}dx$$</question>
+        <question>$$\int{\frac{du}{\sqrt{a^2-u^2}}}$$</question>
         <answer>$$arcsin(\frac{u}{a})+C$$</answer>
     </formula>
 
     <formula>
-        <question>$$\int{\frac{du}{u\sqrt{u^2-a^2}}}dx$$</question>
+        <question>$$\int{\frac{du}{u\sqrt{u^2-a^2}}}$$</question>
         <answer>$$\frac{1}{a}arcsec(\frac{u}{a})+C$$</answer>
     </formula>
 

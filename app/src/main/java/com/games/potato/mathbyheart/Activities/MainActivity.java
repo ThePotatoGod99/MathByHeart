@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity
                 getString(R.string.derivatives),
                 getString(R.string.multiplications),
                 "⭐"};
-        String formulas[] = {"$$\\int{\\frac{1}{1+x^2}}dx$$",
+        String formulas[] = {"$$\\int{\\frac{du}{a^2+u^2}}$$",
                 "$$\\frac{d}{du}(\\frac{u}{v})$$",
                 "$$3 \\times 4$$",
                 "$$\\star\\text{Starred Formulas}\\star$$"};
