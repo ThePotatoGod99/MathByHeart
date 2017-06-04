@@ -23,4 +23,6 @@
 
     <string name="btn_1_label">Back</string>
     <string name="btn_2_label">Next</string>
+
+    <string name="card_label">Press to show the answer</string>
 </resources>

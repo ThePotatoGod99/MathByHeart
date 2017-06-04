@@ -96,7 +96,14 @@ public class PracticeActivity extends AppCompatActivity {
 
         if (formulaList == null || formulaList.isEmpty()) {
             Xd.error("ERROR WHILE READING FILE");
-            Toast.makeText(PracticeActivity.this, "No formulas in this section", Toast.LENGTH_SHORT).show();
+            if(dataFileName.equals("starredList.xml")){
+
+                Toast.makeText(PracticeActivity.this, "No starred formulas. Press the star at a difficult question to star it", Toast.LENGTH_SHORT).show();
+            }
+            else{
+
+                Toast.makeText(PracticeActivity.this, "No formulas in this section", Toast.LENGTH_SHORT).show();
+            }
 //            finish();
 //            this.onBackPressed();
             return false;
@@ -133,6 +140,7 @@ public class PracticeActivity extends AppCompatActivity {
         questionNumber = 0;
         updateFormula();
         updateStar();
+        Toast.makeText(PracticeActivity.this, "Randomized", Toast.LENGTH_SHORT).show();
 
     }
 
