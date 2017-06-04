@@ -1,4 +1,4 @@
-Math by Heart
+[Math by Heart](https://play.google.com/store/apps/details?id=com.games.potato.mathbyheart&hl=en)
 ==================
 
 Open-source android application to learn you math formulas by heart!
