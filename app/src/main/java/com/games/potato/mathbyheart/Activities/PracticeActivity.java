@@ -1,13 +1,17 @@
 package com.games.potato.mathbyheart.Activities;
 
+import android.app.Fragment;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.games.potato.mathbyheart.Data.FormulaList;
@@ -22,56 +26,47 @@ import io.github.kexanie.library.MathView;
 
 
 public class PracticeActivity extends AppCompatActivity {
-    private MathView mathView;
-
-    private Stack<FormulaList.Formula> knownFormulas;
-    private Stack<FormulaList.Formula> unknownFormulas;
-
     private String dataFileName;
 
     private int questionNumber;
 
-    Toolbar appToolbar;
-
-
     private FormulaList formulaList;
     private FormulaList starredFormulaList;
 
-
-    public void init() {
-        setContentView(R.layout.activity_practice);
-
-        appToolbar = (Toolbar) findViewById(R.id.app_toolbar);
-        appToolbar.setTitle(getIntent().getDataString());
-        appToolbar.setTitleTextColor(Color.WHITE);
-        setSupportActionBar(appToolbar);
-
-        mathView = (MathView) findViewById(R.id.math_view);
-        mathView.setEngine(MathView.Engine.KATEX);
-
-        knownFormulas = new Stack();
-        unknownFormulas = new Stack();
-
-
-        questionNumber = 0;
-    }
+    private Card frontCard;
+    private Card backCard;
+    private Card currentCard;/* Reference to the current visible card (Pointer to frontCard or backCard) */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_practice);
+
+        frontCard = new Card();
+        backCard = new Card();
+        backCard.setFront(false);
+        currentCard = frontCard;
+
         formulaList = new FormulaList();
         starredFormulaList = new FormulaList();
 
         dataFileName = getIntent().getDataString();
-        init();
+
+        Toolbar appToolbar = (Toolbar) findViewById(R.id.app_toolbar);
+        appToolbar.setTitle(getIntent().getDataString());
+        appToolbar.setTitleTextColor(Color.WHITE);
+        setSupportActionBar(appToolbar);
+
+        questionNumber = 0;
     }
+
 
     @Override
     protected void onStart() {
         super.onStart();
 
         if (readData()) {
-            setFormulaWithID(questionNumber);
+            updateFormula();
         } else {
             finish();
         }
@@ -93,19 +88,14 @@ public class PracticeActivity extends AppCompatActivity {
                 new File(getFilesDir(),
                         getString(R.string.path_default_formulas) + "/" + dataFileName)
         );
-
         if (formulaList == null || formulaList.isEmpty()) {
-            Xd.error("ERROR WHILE READING FILE");
-            if(dataFileName.equals("starredList.xml")){
+            if (dataFileName.equals("starredList.xml")) {//TODO: Change
 
                 Toast.makeText(PracticeActivity.this, "No starred formulas. Press the star at a difficult question to star it", Toast.LENGTH_SHORT).show();
-            }
-            else{
+            } else {
 
                 Toast.makeText(PracticeActivity.this, "No formulas in this section", Toast.LENGTH_SHORT).show();
             }
-//            finish();
-//            this.onBackPressed();
             return false;
         }
 
@@ -117,8 +107,6 @@ public class PracticeActivity extends AppCompatActivity {
             starredFormulaList = new FormulaList();
         }
         return true;
-
-
     }
 
     public void randomize() {
@@ -141,32 +129,41 @@ public class PracticeActivity extends AppCompatActivity {
         updateFormula();
         updateStar();
         Toast.makeText(PracticeActivity.this, "Randomized", Toast.LENGTH_SHORT).show();
-
     }
 
+    private void flipCard() {
+        currentCard = currentCard.isFront() ? backCard : frontCard;
+        updateFormula();
+    }
 
     public boolean updateFormula() {
-        return setFormulaWithID(questionNumber);
+        boolean result = setFormulaWithID(questionNumber);
+        getFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(
+                        R.animator.card_flip_right_in,
+                        R.animator.card_flip_right_out,
+                        R.animator.card_flip_left_in,
+                        R.animator.card_flip_left_out)
+                .replace(R.id.container, currentCard)
+                .commit();
+        return result;
     }
 
     public void updateStar() {
-        Xd.print(formulaList.get(0).toString());
-
         updateStar(starredFormulaList.contains(
                 formulaList.get(questionNumber
                 )));
     }
 
     public void updateStar(boolean toggledOn) {
-        MenuItem star = appToolbar.getMenu().findItem(R.id.action_favorite);
+        MenuItem star = ((Toolbar) findViewById(R.id.app_toolbar)).getMenu().findItem(R.id.action_favorite);
         if (toggledOn) {
             star.setIcon(R.drawable.ic_star_black_24dp);
         } else {
             star.setIcon(R.drawable.ic_star_border_black_24dp);
         }
     }
-
-
 
     /* Buttons */
 
@@ -193,6 +190,7 @@ public class PracticeActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_randomize:
+                currentCard = frontCard;
                 randomize();
                 return true;
 
@@ -207,6 +205,7 @@ public class PracticeActivity extends AppCompatActivity {
     public void onButtonPressed(View view) {
         String tag = view.getTag().toString();
 
+
         if (tag.equals(getString(R.string.btn_2_label))) {
             questionNumber++;
         } else if (tag.equals(getString(R.string.btn_1_label))) {
@@ -215,25 +214,35 @@ public class PracticeActivity extends AppCompatActivity {
                 questionNumber = formulaList.size() - 1;
             }
         }
+        currentCard = frontCard;
 
         updateFormula();
         updateStar();
     }
 
     public void onMathViewPressed(View view) {
-        setFormula(formulaList.getOtherSide(questionNumber));
+        flipCard();
     }
 
     /* Getters & Setters */
 
-    public void setFormula(String formula) {
-        mathView.setText(formula);
+    public void setFormulaList(FormulaList formulaList) {
+        this.formulaList = formulaList;
+    }
+
+    public FormulaList getFormulaList() {
+        return formulaList;
     }
 
     public boolean setFormulaWithID(int id) {
         try {
-            mathView.setText(
-                    formulaList.getFormulaString(id)
+            FormulaList.Formula formula = formulaList.getFormula(id);
+            /* This also changes the text for currentCard because it's always pointing to the frontCard or the backCard */
+            frontCard.setText(
+                    formula.getQuestion()
+            );
+            backCard.setText(
+                    formula.getAnswer()
             );
 
         } catch (IndexOutOfBoundsException e) {
@@ -245,11 +254,51 @@ public class PracticeActivity extends AppCompatActivity {
         return true;
     }
 
-    public void setFormulaList(FormulaList formulaList) {
-        this.formulaList = formulaList;
+
+    /* Classes */
+    public static class Card extends Fragment {
+        private String text;
+        private boolean isFront = true;
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_card_front, container, false);
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            updateText();
+        }
+
+        public void setText(String text) {
+            this.text = text;
+            if (!(getView() == null)) {
+                updateText();
+            }
+
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        private void updateText() {
+            ((MathView) getView().findViewById(R.id.math_view)).setText(text);
+            if(!isFront){
+                ((TextView) getView().findViewById(R.id.textView)).setText("Press to show the question");
+            }
+        }
+
+
+        public boolean isFront() {
+            return isFront;
+        }
+
+        public void setFront(boolean front) {
+            isFront = front;
+        }
     }
 
-    public FormulaList getFormulaList() {
-        return formulaList;
-    }
 }
