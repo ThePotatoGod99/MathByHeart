@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -28,7 +26,6 @@ import com.games.potato.mathbyheart.R;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -90,8 +87,8 @@ public class MainActivity extends AppCompatActivity
                 "$$\\frac{d}{du}(\\frac{u}{v})$$",
                 "$$3 \\times 4$$",
                 "$$\\star\\text{Starred Formulas}\\star$$"};
-        CustomList customList = new CustomList(this, items, formulas);
-        listView.setAdapter(customList);
+        MainMenuList mainMenuList = new MainMenuList(this, items, formulas);
+        listView.setAdapter(mainMenuList);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -277,7 +274,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private class CustomList extends ArrayAdapter<String> {
+    private class MainMenuList extends ArrayAdapter<String> {
         //TODO: Rename
         private final Activity context;
         private String[] items;
@@ -286,7 +283,7 @@ public class MainActivity extends AppCompatActivity
         private TextView[] textViews;
 
 
-        public CustomList(Activity context, String[] items, String[] formulas) {
+        public MainMenuList(Activity context, String[] items, String[] formulas) {
             super(context, R.layout.list_layout, R.id.text_view, items);
             this.items = items;
             this.formulas = formulas;

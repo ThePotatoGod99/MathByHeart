@@ -1,5 +1,6 @@
 package com.games.potato.mathbyheart.Activities;
 
+import android.animation.ObjectAnimator;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
@@ -20,8 +21,6 @@ import com.games.potato.mathbyheart.math.Xd;
 import com.games.potato.mathbyheart.R;
 
 import java.io.File;
-import java.util.Random;
-import java.util.Stack;
 
 import io.github.kexanie.library.MathView;
 
@@ -62,7 +61,7 @@ public class PracticeActivity extends AppCompatActivity {
         super.onStart();
 
         if (readData()) {
-            updateFormula();
+            updateFormula(0);
         } else {
             finish();
         }
@@ -86,10 +85,8 @@ public class PracticeActivity extends AppCompatActivity {
         );
         if (formulaList == null || formulaList.isEmpty()) {
             if (dataFileName.equals("starredList.xml")) {//TODO: Change
-
                 Toast.makeText(PracticeActivity.this, "No starred formulas. Press the star at a difficult question to star it", Toast.LENGTH_SHORT).show();
             } else {
-
                 Toast.makeText(PracticeActivity.this, "No formulas in this section", Toast.LENGTH_SHORT).show();
             }
             return false;
@@ -121,34 +118,53 @@ public class PracticeActivity extends AppCompatActivity {
 
         formulaList = temp;
         questionNumber = 0;
-        updateFormula();
+        updateFormula(3);
         updateStar();
         Toast.makeText(PracticeActivity.this, "Randomized", Toast.LENGTH_SHORT).show();
     }
 
     private void flipCard() {
         currentCard.setFront(!currentCard.isFront());
-        updateFormula();
+        updateFormula(0);
     }
 
-    public boolean updateFormula() {
+    public boolean updateFormula(int animation) {
+        /* 0: Flip, 1: Left, 2:Right, 3:*/
         boolean result = setFormulaWithID(questionNumber);
         Card card = new Card();
         card.setFormula(currentCard.getFormula());
         card.setFront(currentCard.isFront());
+
         FragmentTransaction fragmentTrans = getFragmentManager()
                 .beginTransaction();
-
-        if (!currentCard.isFront()) {
-            fragmentTrans.setCustomAnimations(
-                    R.animator.card_flip_right_in,
-                    R.animator.card_flip_right_out,
-                    R.animator.card_flip_left_in,
-                    R.animator.card_flip_left_out);
+        switch (animation) {
+            case 1:
+                fragmentTrans.setCustomAnimations(
+                        R.animator.card_swipe_left_in,
+                        R.animator.card_swipe_left_out);
+                break;
+            case 2:
+                fragmentTrans.setCustomAnimations(
+                        R.animator.card_swipe_right_in,
+                        R.animator.card_swipe_right_out);
+                break;
+            case 3:
+                ObjectAnimator
+                        .ofFloat(findViewById(R.id.container), "translationX", 0, 25, -25, 25, -25,15, -15, 6, -6, 0)
+                        .setDuration(1000)
+                        .start();
+                break;
+            default:
+                fragmentTrans.setCustomAnimations(
+                        R.animator.card_flip_right_in,
+                        R.animator.card_flip_right_out);
+                break;
         }
 
         fragmentTrans.replace(R.id.container, card)
                 .commit();
+
+
 
         return result;
     }
@@ -174,18 +190,12 @@ public class PracticeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_favorite:
-                File file = new File(getFilesDir(),
-                        getString(R.string.path_default_formulas) + "/" + "starredFormulas.xml");
-
-
                 boolean toggledOn = false;
                 if (!starredFormulaList.remove(formulaList.get(questionNumber))) {
                     /* If starredFormulaList contains the current question, remove it. Else, add it */
                     starredFormulaList.add(formulaList.get(questionNumber));
                     toggledOn = true;
                 }
-
-
                 updateStar(toggledOn);
                 setFormulaWithID(questionNumber);
 
@@ -208,10 +218,12 @@ public class PracticeActivity extends AppCompatActivity {
     public void onButtonPressed(View view) {
         String tag = view.getTag().toString();
 
-
+        int direction = 0;
         if (tag.equals(getString(R.string.btn_2_label))) {
+            direction = 1;
             questionNumber++;
         } else if (tag.equals(getString(R.string.btn_1_label))) {
+            direction = 2;
             questionNumber--;
             if (questionNumber < 0) {
                 questionNumber = formulaList.size() - 1;
@@ -219,7 +231,7 @@ public class PracticeActivity extends AppCompatActivity {
         }
         currentCard.setFront(true);
 
-        updateFormula();
+        updateFormula(direction);
         updateStar();
     }
 
@@ -244,7 +256,7 @@ public class PracticeActivity extends AppCompatActivity {
             currentCard.setFormula(formula);
         } catch (IndexOutOfBoundsException e) {
             Toast.makeText(PracticeActivity.this, "Going back to start", Toast.LENGTH_SHORT).show();
-            questionNumber = 0; //TODO: change
+            questionNumber = 0;
             setFormulaWithID(questionNumber);
             return false;
         }
@@ -262,7 +274,7 @@ public class PracticeActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_card_front, container, false);
+            return inflater.inflate(R.layout.fragment_card, container, false);
         }
 
         @Override
