@@ -1,6 +1,7 @@
 package com.games.potato.mathbyheart.Activities;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,19 +34,14 @@ public class PracticeActivity extends AppCompatActivity {
     private FormulaList formulaList;
     private FormulaList starredFormulaList;
 
-    private Card frontCard;
-    private Card backCard;
-    private Card currentCard;/* Reference to the current visible card (Pointer to frontCard or backCard) */
+    private Card currentCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practice);
 
-        frontCard = new Card();
-        backCard = new Card();
-        backCard.setFront(false);
-        currentCard = frontCard;
+        currentCard = new Card();
 
         formulaList = new FormulaList();
         starredFormulaList = new FormulaList();
@@ -111,8 +107,7 @@ public class PracticeActivity extends AppCompatActivity {
 
     public void randomize() {
         FormulaList temp = new FormulaList();
-        Random random = new Random();
-        int number = 0;
+        int number;
         while (!formulaList.isEmpty()) {
 
             if (formulaList.size() == 1) {
@@ -132,21 +127,29 @@ public class PracticeActivity extends AppCompatActivity {
     }
 
     private void flipCard() {
-        currentCard = currentCard.isFront() ? backCard : frontCard;
+        currentCard.setFront(!currentCard.isFront());
         updateFormula();
     }
 
     public boolean updateFormula() {
         boolean result = setFormulaWithID(questionNumber);
-        getFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(
-                        R.animator.card_flip_right_in,
-                        R.animator.card_flip_right_out,
-                        R.animator.card_flip_left_in,
-                        R.animator.card_flip_left_out)
-                .replace(R.id.container, currentCard)
+        Card card = new Card();
+        card.setFormula(currentCard.getFormula());
+        card.setFront(currentCard.isFront());
+        FragmentTransaction fragmentTrans = getFragmentManager()
+                .beginTransaction();
+
+        if (!currentCard.isFront()) {
+            fragmentTrans.setCustomAnimations(
+                    R.animator.card_flip_right_in,
+                    R.animator.card_flip_right_out,
+                    R.animator.card_flip_left_in,
+                    R.animator.card_flip_left_out);
+        }
+
+        fragmentTrans.replace(R.id.container, card)
                 .commit();
+
         return result;
     }
 
@@ -190,7 +193,7 @@ public class PracticeActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_randomize:
-                currentCard = frontCard;
+                currentCard.setFront(true);
                 randomize();
                 return true;
 
@@ -214,7 +217,7 @@ public class PracticeActivity extends AppCompatActivity {
                 questionNumber = formulaList.size() - 1;
             }
         }
-        currentCard = frontCard;
+        currentCard.setFront(true);
 
         updateFormula();
         updateStar();
@@ -238,13 +241,7 @@ public class PracticeActivity extends AppCompatActivity {
         try {
             FormulaList.Formula formula = formulaList.getFormula(id);
             /* This also changes the text for currentCard because it's always pointing to the frontCard or the backCard */
-            frontCard.setText(
-                    formula.getQuestion()
-            );
-            backCard.setText(
-                    formula.getAnswer()
-            );
-
+            currentCard.setFormula(formula);
         } catch (IndexOutOfBoundsException e) {
             Toast.makeText(PracticeActivity.this, "Going back to start", Toast.LENGTH_SHORT).show();
             questionNumber = 0; //TODO: change
@@ -257,8 +254,10 @@ public class PracticeActivity extends AppCompatActivity {
 
     /* Classes */
     public static class Card extends Fragment {
-        private String text;
         private boolean isFront = true;
+
+
+        private FormulaList.Formula formula;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -272,21 +271,13 @@ public class PracticeActivity extends AppCompatActivity {
             updateText();
         }
 
-        public void setText(String text) {
-            this.text = text;
-            if (!(getView() == null)) {
-                updateText();
-            }
-
-        }
-
         public String getText() {
-            return text;
+            return isFront ? formula.getQuestion() : formula.getAnswer();
         }
 
         private void updateText() {
-            ((MathView) getView().findViewById(R.id.math_view)).setText(text);
-            if(!isFront){
+            ((MathView) getView().findViewById(R.id.math_view)).setText(getText());
+            if (!isFront) {
                 ((TextView) getView().findViewById(R.id.textView)).setText("Press to show the question");
             }
         }
@@ -298,6 +289,17 @@ public class PracticeActivity extends AppCompatActivity {
 
         public void setFront(boolean front) {
             isFront = front;
+            if (!(getView() == null)) {
+                updateText();
+            }
+        }
+
+        public FormulaList.Formula getFormula() {
+            return formula;
+        }
+
+        public void setFormula(FormulaList.Formula formula) {
+            this.formula = formula;
         }
     }
 
