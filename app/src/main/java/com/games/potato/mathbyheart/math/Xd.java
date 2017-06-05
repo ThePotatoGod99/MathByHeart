@@ -8,33 +8,7 @@ import android.util.Log;
  */
 
 public class Xd {
-    public static boolean isNumber(Character character){
-        return (character >= '0' && character <= '9');
-    }
-    
-    public static boolean isOperator(Character character){
-        switch(character){
-            case '+':
-            case '-':
-            case '*':
-            case '/':
-                return true;
-        }
-        return false;
-    }
-    
-    public static boolean priorityHigherOrEqual(char operator1, char operator2){
-        if(operator1 == '*' || operator1 == '/'){
-            return true;
-        }
-        
-        if((operator1 == '+' || operator1 == '-') &&
-                (operator2 == '+' || operator2 == '-')){
-            return true;
-        }
-        return false;
-    }
-
+    /* This class should be deleted at release. */
 
     //TODO: Remove this.
     public static void print(String string){

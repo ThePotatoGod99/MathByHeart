@@ -56,7 +56,9 @@ public class MainActivity extends AppCompatActivity
         MobileAds.initialize(this, "ca-app-pub-6790111268050062~2012680831");
 
         AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("FB2944BD719884A6E6319E924DCEFB28")
+                .build();//"FB2944BD719884A6E6319E924DCEFB28"
         mAdView.loadAd(adRequest);
 
 
@@ -77,18 +79,6 @@ public class MainActivity extends AppCompatActivity
             reset();
             preferences.edit().putBoolean("first_start", false).commit();
         }
-
-        try {
-            BufferedReader bf = new BufferedReader(new FileReader(new File(getFilesDir(), "default_formulas/starredFormulas.xml")));
-            String line;
-            while ((line = bf.readLine()) != null) {
-                Xd.print(line);
-            }
-            Xd.print("ADSF");
-        } catch (IOException e) {
-
-        }
-
 
         ListView listView = (ListView) findViewById(R.id.list_view);
 

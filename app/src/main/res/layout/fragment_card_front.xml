@@ -1,0 +1,45 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:layout_centerInParent="true"
+                                             android:layout_marginBottom="65dp"
+                                             android:layout_marginLeft="32dp"
+                                             android:layout_marginRight="32dp"
+                                             android:layout_marginTop="75dp"
+                                             android:background="@android:color/darker_gray"
+                                             android:onClick="onMathViewPressed"
+                                             android:orientation="vertical"
+                                             app:layout_constraintBottom_toBottomOf="parent"
+                                             app:layout_constraintLeft_toLeftOf="parent"
+                                             app:layout_constraintRight_toRightOf="parent"
+                                             app:layout_constraintTop_toTopOf="parent">
+
+    <io.github.kexanie.library.MathView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/math_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </io.github.kexanie.library.MathView>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Press to show the answer"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>
