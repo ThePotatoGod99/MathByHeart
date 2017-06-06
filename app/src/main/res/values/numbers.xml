@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="card_flip_time_full">1500</integer>
-    <integer name="card_flip_time_half">750</integer>
+    <integer name="card_flip_time_full">750</integer>
+    <integer name="card_flip_time_half">375</integer>
+
+    <integer name="card_flip_angle_pos">180</integer>
+    <integer name="card_flip_angle_neg">-180</integer>
+
+
+    <integer name="card_swipe_position_pos">1000</integer>
+    <integer name="card_swipe_position_neg">-1000</integer>
 
 </resources>

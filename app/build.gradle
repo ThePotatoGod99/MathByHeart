@@ -7,8 +7,8 @@ android {
         applicationId "com.games.potato.mathbyheart"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 6
-        versionName "1.101"
+        versionCode 7
+        versionName "1.200"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
