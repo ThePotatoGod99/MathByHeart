@@ -61,7 +61,7 @@ public class PracticeActivity extends AppCompatActivity {
         super.onStart();
 
         if (readData()) {
-            updateFormula(0);
+            updateFormula(4);
         } else {
             finish();
         }
@@ -125,11 +125,11 @@ public class PracticeActivity extends AppCompatActivity {
 
     private void flipCard() {
         currentCard.setFront(!currentCard.isFront());
-        updateFormula(0);
+        updateFormula(4);
     }
 
     public boolean updateFormula(int animation) {
-        /* 0: Flip, 1: Left, 2:Right, 3:*/
+        /* 0: None, 1: Left, 2:Right, 3:shake 4: Flip*/
         boolean result = setFormulaWithID(questionNumber);
         Card card = new Card();
         card.setFormula(currentCard.getFormula());
@@ -154,10 +154,12 @@ public class PracticeActivity extends AppCompatActivity {
                         .setDuration(1000)
                         .start();
                 break;
-            default:
+            case 4:
                 fragmentTrans.setCustomAnimations(
                         R.animator.card_flip_right_in,
                         R.animator.card_flip_right_out);
+                break;
+            default:
                 break;
         }
 
@@ -252,7 +254,6 @@ public class PracticeActivity extends AppCompatActivity {
     public boolean setFormulaWithID(int id) {
         try {
             FormulaList.Formula formula = formulaList.getFormula(id);
-            /* This also changes the text for currentCard because it's always pointing to the frontCard or the backCard */
             currentCard.setFormula(formula);
         } catch (IndexOutOfBoundsException e) {
             Toast.makeText(PracticeActivity.this, "Going back to start", Toast.LENGTH_SHORT).show();

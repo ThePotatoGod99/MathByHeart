@@ -81,9 +81,15 @@ public class MainActivity extends AppCompatActivity
 
         String items[] = {getString(R.string.integrals),
                 getString(R.string.derivatives),
+                "$$\\frac{d}{du}(\\frac{u}{v})$$",
+                "$$\\frac{d}{du}(\\frac{u}{v})$$",
+                "$$\\frac{d}{du}(\\frac{u}{v})$$",
                 getString(R.string.multiplications),
                 "⭐"};
         String formulas[] = {"$$\\int{\\frac{du}{a^2+u^2}}$$",
+                "$$\\frac{d}{du}(\\frac{u}{v})$$",
+                "$$\\frac{d}{du}(\\frac{u}{v})$$",
+                "$$\\frac{d}{du}(\\frac{u}{v})$$",
                 "$$\\frac{d}{du}(\\frac{u}{v})$$",
                 "$$3 \\times 4$$",
                 "$$\\star\\text{Starred Formulas}\\star$$"};
