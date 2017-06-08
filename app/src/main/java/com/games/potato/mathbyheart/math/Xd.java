@@ -13,7 +13,7 @@ public class Xd {
     //TODO: Remove this.
     public static void print(String string){
         if(string != null) {
-            Log.d("LOGGING_HOLA", string);
+            Log.d("LOGGING_HOLA_runtime", string);
         }
         else{
             print("null");
@@ -22,7 +22,7 @@ public class Xd {
 
     public static void error(String string){
         if(string != null) {
-            Log.e("ERROR_HOLA", string);
+            Log.e("ERROR_HOLA_runtime", string);
         }
         else{
             print("null");

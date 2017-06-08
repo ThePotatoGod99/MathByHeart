@@ -47,7 +47,6 @@ public class FormulaList implements List<FormulaList.Formula> {
             FormulaList formulaList = ser.read(FormulaList.class, file);
 
             formulaList.sourceFile = file;
-            formulaList.setSourceFile(file);
 
             if (formulaList.table != null) {
                 if (formulaList.isEmpty()) {
@@ -59,8 +58,7 @@ public class FormulaList implements List<FormulaList.Formula> {
                             answer = "$$" + formulaList.table.getAnswer(x, y).toString() + "$$";
                             formulaList.add(new Formula(
                                     operation,
-                                    answer,
-                                    file
+                                    answer
                                     ));
                         }
                     }
@@ -86,12 +84,6 @@ public class FormulaList implements List<FormulaList.Formula> {
 
     /* Getters & Setters */
 
-    public void setSourceFile(File file){
-        /* Changes the source file for all formulas in the list */
-        for(Formula formula : this){
-            formula.setSourceFile(file);
-        }
-    }
 
     public File getSourceFile(){
         return this.sourceFile;
@@ -276,26 +268,17 @@ public class FormulaList implements List<FormulaList.Formula> {
         @Element(name = "answer")
         private String answer;
 
-        private File sourceFile;
 
 
-        public Formula(String question, String answer, File sourceFile) {
+        public Formula(String question, String answer) {
             this.question = question;
             this.answer = answer;
-            this.sourceFile = sourceFile;
         }
 
         private Formula() {
         }
 
         /* Getters & Setters */
-        public void setSourceFile(File sourceFile){
-            this.sourceFile = sourceFile;
-        }
-
-        public File getSourceFile() {
-            return sourceFile;
-        }
 
         public String getQuestion() {
             return question;
