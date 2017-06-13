@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -279,14 +280,15 @@ public class PracticeActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onResume() {
-            super.onResume();
+        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
             updateText();
         }
 
         public String getText() {
             return isFront ? formula.getQuestion() : formula.getAnswer();
         }
+
 
         private void updateText() {
             ((MathView) getView().findViewById(R.id.math_view)).setText(getText());
