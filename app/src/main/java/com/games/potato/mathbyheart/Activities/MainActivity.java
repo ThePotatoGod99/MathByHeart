@@ -81,16 +81,12 @@ public class MainActivity extends AppCompatActivity
 
         String items[] = {getString(R.string.integrals),
                 getString(R.string.derivatives),
-                "$$\\frac{d}{du}(\\frac{u}{v})$$",
-                "$$\\frac{d}{du}(\\frac{u}{v})$$",
-                "$$\\frac{d}{du}(\\frac{u}{v})$$",
+                "Create",
                 getString(R.string.multiplications),
                 "⭐"};
         String formulas[] = {"$$\\int{\\frac{du}{a^2+u^2}}$$",
                 "$$\\frac{d}{du}(\\frac{u}{v})$$",
-                "$$\\frac{d}{du}(\\frac{u}{v})$$",
-                "$$\\frac{d}{du}(\\frac{u}{v})$$",
-                "$$\\frac{d}{du}(\\frac{u}{v})$$",
+                "Create",
                 "$$3 \\times 4$$",
                 "$$\\star\\text{Starred Formulas}\\star$$"};
         MainMenuList mainMenuList = new MainMenuList(this, items, formulas);
@@ -104,9 +100,15 @@ public class MainActivity extends AppCompatActivity
                 if (string.equals("⭐")) {
                     string = "starredList";
                 }
-                Intent practiceActivityIntent = new Intent(MainActivity.this, PracticeActivity.class);
-                practiceActivityIntent.setData(Uri.parse(string + ".xml"));
-                startActivity(practiceActivityIntent);
+                else if(string.equals("Create")){
+                    Intent createActivityIntent = new Intent(MainActivity.this, CreateActivity.class);
+                    startActivity(createActivityIntent);
+                }
+                else {
+                    Intent practiceActivityIntent = new Intent(MainActivity.this, PracticeActivity.class);
+                    practiceActivityIntent.setData(Uri.parse(string + ".xml"));
+                    startActivity(practiceActivityIntent);
+                }
             }
         });
     }
