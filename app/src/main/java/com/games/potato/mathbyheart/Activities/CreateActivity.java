@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +32,7 @@ import com.games.potato.mathbyheart.R;
 import com.games.potato.mathbyheart.math.Xd;
 
 import java.io.File;
+import java.text.Normalizer;
 
 import io.github.kexanie.library.MathView;
 
@@ -47,6 +49,7 @@ public class CreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_create);
+//        setContentView(R.layout.activity_practice);
 
         mathView = (MathView) findViewById(R.id.math_view);
 
@@ -66,14 +69,9 @@ public class CreateActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        ((MathView) findViewById(R.id.math_view_question)).setText("$$\\frac{3}{4}$$");
-        ((MathView) findViewById(R.id.math_view_answer)).setText("$$\\frac{43}{46}$$");
 
-//        if (readData()) {
+
         updateFormula(0);
-//        } else {
-//            finish();
-//        }
     }
 
     @Override
@@ -86,49 +84,114 @@ public class CreateActivity extends AppCompatActivity {
 
     private void setupTextBoxes() {
 
-        EditText editText_question = (EditText) findViewById(R.id.textBox_question);
-        EditText editText_answer = (EditText) findViewById(R.id.textBox_answer);
 
-        editText_question.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                ((MathView) findViewById(R.id.math_view_question)).setText(
-                        ((EditText) findViewById(R.id.textBox_question)).getText().toString());
-                updateFormula(0);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        editText_answer.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                ((MathView) findViewById(R.id.math_view_answer)).setText(
-                        ((EditText) findViewById(R.id.textBox_answer)).getText().toString());
-                updateFormula(0);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+//        EditText editText_question = (EditText) findViewById(R.id.textBox_question);
+//        EditText editText_answer = (EditText) findViewById(R.id.textBox_answer);
+//
+//        editText_question.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+////                ((MathView) findViewById(R.id.math_view_answer)).setVisibility(
+////                        hasFocus ?
+////                                View.INVISIBLE :
+////                                View.VISIBLE
+////                );
+//
+//
+//            }
+//        });
+//
+//        editText_question.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                ((MathView) findViewById(R.id.math_view_question)).setText(
+//                        ((EditText) findViewById(R.id.textBox_question)).getText().toString());
+//                updateFormula(0);
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
+//
+//
+////        (MathView) findViewById(R.id.math_view_question).setto
+//        editText_answer.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+////                ((MathView) findViewById(R.id.math_view_question)).setVisibility(
+////                        hasFocus ?
+////                                View.INVISIBLE :
+////                                View.VISIBLE
+////                );
+//
+//
+//            }
+//        });
+//
+//
+//        editText_answer.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                ((MathView) findViewById(R.id.math_view_answer)).setText(
+//                        ((EditText) findViewById(R.id.textBox_answer)).getText().toString());
+//                updateFormula(0);
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
     }
 
     public void updateFormula(int animation) {
+
+
+        CreateCard card = new CreateCard();
+        FormulaList.Formula formula = new FormulaList.Formula("$$\\frac{3}{4}$$", "$$\\text(Answer here)$$");
+        card.setFormula(formula);
+
+        Xd.print("ASDFASDF");
+
+        Xd.print(card.getFormula().toString());
+
+
+        card.setFront(true);
+
+        findViewById(R.id.create_container).setBackgroundColor(Color.YELLOW);
+
+        FragmentTransaction fragmentTrans = getFragmentManager()
+                .beginTransaction();
+
+
+
+
+
+        fragmentTrans.setCustomAnimations(
+                R.animator.card_flip_right_in,
+                R.animator.card_flip_right_out);
+
+
+        fragmentTrans.replace(R.id.create_container, card)
+                .commit();
+
+
+
+
+
+
        /* 0: None, 1: Left, 2:Right, 3:shake 4: Flip*/
 //        PracticeActivity.Card card = new PracticeActivity.Card();
 //
@@ -177,9 +240,6 @@ public class CreateActivity extends AppCompatActivity {
     /* Buttons */
 
 
-//    public void onMathViewPressed(View view) {
-//        flipCard();
-//    }
 
     /* Getters & Setters */
 
@@ -189,26 +249,49 @@ public class CreateActivity extends AppCompatActivity {
 
 
         private FormulaList.Formula formula;
+        private Context context;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-
+            Xd.print("On create view");
             return inflater.inflate(R.layout.fragment_card, container, false);
         }
 
+        @Nullable
         @Override
-        public void onResume() {
-            super.onResume();
+        public View getView() {
+            View view = super.getView();
+            if (view != null) {
+                view.setBackgroundColor(Color.RED);
+            }
+            Xd.print("GET VIEW");
+
+
+            return view;
+        }
+
+        @Override
+        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            Xd.print("on view created create view");
+            getView().setBackgroundColor(Color.GREEN);
             updateText();
         }
 
         public String getText() {
+            Xd.print(getFormula().toString() + " ASDF ");
+
+
             return isFront ? formula.getQuestion() : formula.getAnswer();
         }
 
+
         private void updateText() {
             ((MathView) getView().findViewById(R.id.math_view)).setText(getText());
+            if (!isFront) {
+                ((TextView) getView().findViewById(R.id.textView)).setText("Press to show the question");
+            }
         }
 
 

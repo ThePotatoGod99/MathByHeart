@@ -23,97 +23,24 @@
         />
 
 
-    <TextView
-        android:id="@+id/answer_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
-        android:gravity="center|right"
-        android:text="Answer Preview:"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/table_mathViews"
-        />
-
-    <TextView
-        android:id="@+id/question_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:gravity="center|left"
-        android:text="Question Preview:"
-        app:layout_constraintLeft_toLeftOf="parent"
-
-        android:layout_marginBottom="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/table_mathViews"
-        />
-
-
-    <TableLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout_textBoxes"
-        android:id="@+id/table_mathViews">
-        <!--app:layout_constraintBottom_toTopOf="@+id/constraintLayout"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/question_label"-->
-
-
-
-        <TableRow
-            android:layout_width="fill_parent"
-
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal">
-
-            <io.github.kexanie.library.MathView
-
-                android:id="@+id/math_view_question"
-                android:layout_weight="1"
-                android:background="@android:color/darker_gray"
-
-
-                android:gravity="center|left"
-                android:padding="20dip"
-                android:textAlignment="center"
-                >
-            </io.github.kexanie.library.MathView>
-
-            <!--<TextView-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="#a09f9f"-->
-            <!--android:gravity="center"-->
-            <!--android:padding="20dip"-->
-            <!--android:text="Row 3 column 2"-->
-            <!--android:textColor="#000000"/>-->
-            <Space
-                android:layout_width="8dp"
-                />
-
-            <io.github.kexanie.library.MathView
-
-                android:id="@+id/math_view_answer"
-                android:layout_weight="1"
-                android:background="@android:color/darker_gray"
-
-
-                android:gravity="center|right"
-
-
-                android:padding="20dip"
-
-                android:textAlignment="center"
-                >
-            </io.github.kexanie.library.MathView>
-        </TableRow>
-
-    </TableLayout>
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:id="@+id/create_container"
+                                                 android:layout_width="0dp"
+                                                 android:layout_height="0dp"
+                                                 android:layout_marginLeft="0dp"
+                                                 android:layout_marginRight="0dp"
+                                                 android:layout_marginTop="0dp"
+                                                 android:background="@color/colorPrimary"
+                                                 android:orientation="vertical"
+                                                 app:layout_constraintHorizontal_bias="0.0"
+                                                 app:layout_constraintLeft_toLeftOf="parent"
+                                                 app:layout_constraintRight_toRightOf="parent"
+                                                 app:layout_constraintTop_toBottomOf="@+id/app_toolbar"
+                                                 app:layout_constraintBottom_toBottomOf="parent"
+                                                 android:layout_marginBottom="112dp">
+    </android.support.constraint.ConstraintLayout>
 
 
     <!--<GridLayout-->
@@ -138,15 +65,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
 
         <EditText
             android:id="@+id/textBox_question"
@@ -162,8 +89,7 @@
             app:layout_constraintBottom_toTopOf="@+id/textBox_answer"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="8dp"/>
+            app:layout_constraintRight_toRightOf="parent"/>
 
         <EditText
             android:id="@+id/textBox_answer"
@@ -181,6 +107,5 @@
             app:layout_constraintRight_toRightOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
-
 
 </android.support.constraint.ConstraintLayout>

@@ -36,6 +36,8 @@ public class PracticeActivity extends AppCompatActivity {
 
     private Card currentCard;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +138,9 @@ public class PracticeActivity extends AppCompatActivity {
         card.setFormula(currentCard.getFormula());
         card.setFront(currentCard.isFront());
 
+
+
+
         FragmentTransaction fragmentTrans = getFragmentManager()
                 .beginTransaction();
         switch (animation) {
@@ -166,6 +171,7 @@ public class PracticeActivity extends AppCompatActivity {
 
         fragmentTrans.replace(R.id.container, card)
                 .commit();
+
 
 
 
@@ -276,16 +282,22 @@ public class PracticeActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            Xd.print("On create view");
             return inflater.inflate(R.layout.fragment_card, container, false);
         }
 
         @Override
         public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
+            Xd.print("on view created create view");
             updateText();
         }
 
         public String getText() {
+            Xd.print(getFormula().toString() + " ASDF ");
+
+
+
             return isFront ? formula.getQuestion() : formula.getAnswer();
         }
 
