@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity
         File file = new File(getFilesDir(), "default_formulas");
 
         ArrayList<String> items = new ArrayList<String>(Arrays.asList(file.list()));
+        items.remove("starredList");//TODO: Change
         items.add("Create");
         items.add("⭐");
 
