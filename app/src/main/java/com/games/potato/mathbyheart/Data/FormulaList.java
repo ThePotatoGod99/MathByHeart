@@ -59,7 +59,7 @@ public class FormulaList implements List<FormulaList.Formula> {
                             formulaList.add(new Formula(
                                     operation,
                                     answer
-                                    ));
+                            ));
                         }
                     }
                 }
@@ -85,7 +85,7 @@ public class FormulaList implements List<FormulaList.Formula> {
     /* Getters & Setters */
 
 
-    public File getSourceFile(){
+    public File getSourceFile() {
         return this.sourceFile;
     }
 
@@ -269,7 +269,6 @@ public class FormulaList implements List<FormulaList.Formula> {
         private String answer;
 
 
-
         public Formula(String question, String answer) {
             this.question = question;
             this.answer = answer;
@@ -278,7 +277,21 @@ public class FormulaList implements List<FormulaList.Formula> {
         private Formula() {
         }
 
+
+        public boolean isEmpty() {
+            return (question.isEmpty() || question.equals("$$$$"))
+                    && (answer.isEmpty() || answer.equals("$$$$"));
+        }
+
         /* Getters & Setters */
+        public String getFormula(boolean isFront){
+            if(isFront){
+                return question;
+            }
+            else{
+                return answer;
+            }
+        }
 
         public String getQuestion() {
             return question;

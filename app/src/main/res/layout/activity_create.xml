@@ -19,28 +19,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        />
-
-
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 xmlns:tools="http://schemas.android.com/tools"
-                                                 android:id="@+id/create_container"
-                                                 android:layout_width="0dp"
-                                                 android:layout_height="0dp"
-                                                 android:layout_marginLeft="0dp"
-                                                 android:layout_marginRight="0dp"
-                                                 android:layout_marginTop="0dp"
-                                                 android:background="@color/colorPrimary"
-                                                 android:orientation="vertical"
-                                                 app:layout_constraintHorizontal_bias="0.0"
-                                                 app:layout_constraintLeft_toLeftOf="parent"
-                                                 app:layout_constraintRight_toRightOf="parent"
-                                                 app:layout_constraintTop_toBottomOf="@+id/app_toolbar"
-                                                 app:layout_constraintBottom_toBottomOf="parent"
-                                                 android:layout_marginBottom="112dp">
-    </android.support.constraint.ConstraintLayout>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
 
     <!--<GridLayout-->
@@ -61,51 +40,36 @@
 
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout_textBoxes"
+        android:id="@+id/create_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:onClick="onMathViewPressed"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/textBox"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_toolbar">
+    </android.support.constraint.ConstraintLayout>
+
+    <EditText
+        android:id="@+id/textBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="7dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:hint="@string/hint_question_input"
+        android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-
-        <EditText
-            android:id="@+id/textBox_question"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:hint="Enter question here"
-            android:maxLines="1"
-            app:layout_constraintBottom_toTopOf="@+id/textBox_answer"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
-
-        <EditText
-            android:id="@+id/textBox_answer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:hint="Enter answer here"
-            android:maxLines="1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
-
-    </android.support.constraint.ConstraintLayout>
+        app:layout_constraintRight_toRightOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -1,8 +1,10 @@
 package com.games.potato.mathbyheart.Activities;
 
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -35,7 +37,6 @@ public class PracticeActivity extends AppCompatActivity {
     private FormulaList starredFormulaList;
 
     private Card currentCard;
-
 
 
     @Override
@@ -132,47 +133,13 @@ public class PracticeActivity extends AppCompatActivity {
     }
 
     public boolean updateFormula(int animation) {
-        /* 0: None, 1: Left, 2:Right, 3:shake 4: Flip*/
         boolean result = setFormulaWithID(questionNumber);
         Card card = new Card();
         card.setFormula(currentCard.getFormula());
         card.setFront(currentCard.isFront());
 
 
-
-
-        FragmentTransaction fragmentTrans = getFragmentManager()
-                .beginTransaction();
-        switch (animation) {
-            case 1:
-                fragmentTrans.setCustomAnimations(
-                        R.animator.card_swipe_left_in,
-                        R.animator.card_swipe_left_out);
-                break;
-            case 2:
-                fragmentTrans.setCustomAnimations(
-                        R.animator.card_swipe_right_in,
-                        R.animator.card_swipe_right_out);
-                break;
-            case 3:
-                ObjectAnimator
-                        .ofFloat(findViewById(R.id.container), "translationX", 0, 25, -25, 25, -25,15, -15, 6, -6, 0)
-                        .setDuration(1000)
-                        .start();
-                break;
-            case 4:
-                fragmentTrans.setCustomAnimations(
-                        R.animator.card_flip_right_in,
-                        R.animator.card_flip_right_out);
-                break;
-            default:
-                break;
-        }
-
-        fragmentTrans.replace(R.id.container, card)
-                .commit();
-
-
+        card.animateReplacement(this, animation, R.id.container);
 
 
         return result;
@@ -282,22 +249,16 @@ public class PracticeActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            Xd.print("On create view");
             return inflater.inflate(R.layout.fragment_card, container, false);
         }
 
         @Override
         public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
-            Xd.print("on view created create view");
             updateText();
         }
 
         public String getText() {
-            Xd.print(getFormula().toString() + " ASDF ");
-
-
-
             return isFront ? formula.getQuestion() : formula.getAnswer();
         }
 
@@ -305,8 +266,47 @@ public class PracticeActivity extends AppCompatActivity {
         private void updateText() {
             ((MathView) getView().findViewById(R.id.math_view)).setText(getText());
             if (!isFront) {
-                ((TextView) getView().findViewById(R.id.textView)).setText("Press to show the question");
+                ((TextView) getView().findViewById(R.id.textView))
+                        .setText("Press to show the question");
             }
+        }
+
+        public FragmentTransaction animateReplacement(Activity context, int animation, int containerToReplace) {
+        /* 0: None, 1: Left, 2:Right, 3:shake 4: Flip*/
+            FragmentTransaction fragmentTrans = context.getFragmentManager()
+                    .beginTransaction();
+
+
+            Xd.print(animation + " : ");
+            switch (animation) {
+                case 1:
+                    fragmentTrans.setCustomAnimations(
+                            R.animator.card_swipe_left_in,
+                            R.animator.card_swipe_left_out);
+                    break;
+                case 2:
+                    fragmentTrans.setCustomAnimations(
+                            R.animator.card_swipe_right_in,
+                            R.animator.card_swipe_right_out);
+                    break;
+                case 3:
+                    ObjectAnimator
+                            .ofFloat(context.findViewById(containerToReplace), "translationX", 0, 25, -25, 25, -25, 15, -15, 6, -6, 0)
+                            .setDuration(1000)
+                            .start();
+                    break;
+                case 4:
+                    fragmentTrans.setCustomAnimations(
+                            R.animator.card_flip_right_in,
+                            R.animator.card_flip_right_out);
+                    break;
+                default:
+                    break;
+            }
+
+            fragmentTrans.replace(containerToReplace, this)
+                    .commit();
+            return fragmentTrans;
         }
 
 
@@ -317,7 +317,7 @@ public class PracticeActivity extends AppCompatActivity {
         public void setFront(boolean front) {
             isFront = front;
             if (!(getView() == null)) {
-                updateText();
+//                updateText();
             }
         }
 
@@ -327,6 +327,14 @@ public class PracticeActivity extends AppCompatActivity {
 
         public void setFormula(FormulaList.Formula formula) {
             this.formula = formula;
+        }
+
+        public void setQuestion(String question) {
+            formula.setQuestion(question);
+        }
+
+        public void setAnswer(String answer) {
+            formula.setAnswer(answer);
         }
     }
 

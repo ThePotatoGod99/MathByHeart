@@ -1,18 +1,23 @@
 package com.games.potato.mathbyheart.Activities;
 
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -39,281 +44,204 @@ import io.github.kexanie.library.MathView;
 
 public class CreateActivity extends AppCompatActivity {
 
-    private int questionNumber;
+    EditText editText;
 
+    private FormulaList formulaList;
 
-    private MathView mathView;
+    private FormulaList.Formula currentFormula;
+    private boolean isFront = true;
+
+    private int questionNumber = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_create);
-//        setContentView(R.layout.activity_practice);
 
-        mathView = (MathView) findViewById(R.id.math_view);
-
+        currentFormula = new FormulaList.Formula("", "");
+        formulaList = new FormulaList();
 
         Toolbar appToolbar = (Toolbar) findViewById(R.id.app_toolbar);
         appToolbar.setTitle(getIntent().getDataString());
         appToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(appToolbar);
 
-        questionNumber = 0;
 
-        setupTextBoxes();
+        editText = (EditText) findViewById(R.id.textBox);
 
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String string = "$$" +
+                        editText.getText().toString() +
+                        "$$";
+                if (isFront) {
+                    currentFormula.setQuestion(string);
+
+                } else {
+                    currentFormula.setAnswer(string);
+                }
+                updateFormula(0);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
-
 
     @Override
     protected void onStart() {
         super.onStart();
-
-
         updateFormula(0);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.practice_menu, menu);
+        inflater.inflate(R.menu.create_menu, menu);
         return true;
     }
 
 
-    private void setupTextBoxes() {
-
-
-//        EditText editText_question = (EditText) findViewById(R.id.textBox_question);
-//        EditText editText_answer = (EditText) findViewById(R.id.textBox_answer);
-//
-//        editText_question.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-////                ((MathView) findViewById(R.id.math_view_answer)).setVisibility(
-////                        hasFocus ?
-////                                View.INVISIBLE :
-////                                View.VISIBLE
-////                );
-//
-//
-//            }
-//        });
-//
-//        editText_question.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                ((MathView) findViewById(R.id.math_view_question)).setText(
-//                        ((EditText) findViewById(R.id.textBox_question)).getText().toString());
-//                updateFormula(0);
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
-//
-//
-////        (MathView) findViewById(R.id.math_view_question).setto
-//        editText_answer.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-////                ((MathView) findViewById(R.id.math_view_question)).setVisibility(
-////                        hasFocus ?
-////                                View.INVISIBLE :
-////                                View.VISIBLE
-////                );
-//
-//
-//            }
-//        });
-//
-//
-//        editText_answer.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                ((MathView) findViewById(R.id.math_view_answer)).setText(
-//                        ((EditText) findViewById(R.id.textBox_answer)).getText().toString());
-//                updateFormula(0);
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
-    }
-
     public void updateFormula(int animation) {
+        PracticeActivity.Card card = new PracticeActivity.Card();
+        card.setFormula(currentFormula);
+        card.setFront(isFront);
 
-
-        CreateCard card = new CreateCard();
-        FormulaList.Formula formula = new FormulaList.Formula("$$\\frac{3}{4}$$", "$$\\text(Answer here)$$");
-        card.setFormula(formula);
-
-        Xd.print("ASDFASDF");
-
-        Xd.print(card.getFormula().toString());
-
-
-        card.setFront(true);
-
-        findViewById(R.id.create_container).setBackgroundColor(Color.YELLOW);
-
-        FragmentTransaction fragmentTrans = getFragmentManager()
-                .beginTransaction();
-
-
-
-
-
-        fragmentTrans.setCustomAnimations(
-                R.animator.card_flip_right_in,
-                R.animator.card_flip_right_out);
-
-
-        fragmentTrans.replace(R.id.create_container, card)
-                .commit();
-
-
-
-
-
-
-       /* 0: None, 1: Left, 2:Right, 3:shake 4: Flip*/
-//        PracticeActivity.Card card = new PracticeActivity.Card();
-//
-//        FormulaList.Formula formula = (currentCard.getFormula() == null) ?
-//                new FormulaList.Formula("", "") :
-//                currentCard.getFormula();
-//
-//        card.setFormula(formula);
-//        card.setFront(currentCard.isFront());
-//
-//        FragmentTransaction fragmentTrans = getFragmentManager()
-//                .beginTransaction();
-//        switch (animation) {
-//            case 1:
-//                fragmentTrans.setCustomAnimations(
-//                        R.animator.card_swipe_left_in,
-//                        R.animator.card_swipe_left_out);
-//                break;
-//            case 2:
-//                fragmentTrans.setCustomAnimations(
-//                        R.animator.card_swipe_right_in,
-//                        R.animator.card_swipe_right_out);
-//                break;
-//            case 3:
-//                ObjectAnimator
-//                        .ofFloat(findViewById(R.id.container), "translationX", 0, 25, -25, 25, -25, 15, -15, 6, -6, 0)
-//                        .setDuration(1000)
-//                        .start();
-//                break;
-//            case 4:
-//                fragmentTrans.setCustomAnimations(
-//                        R.animator.card_flip_right_in,
-//                        R.animator.card_flip_right_out);
-//                break;
-//            default:
-//                break;
-//        }
-//
-//        fragmentTrans.replace(R.id.container, card)
-//                .commit();
-
-
+        card.animateReplacement(this, animation, R.id.create_container);
     }
 
+    public void updateFormulaList() {
+        if (formulaList.size() > questionNumber) {
+            formulaList.set(questionNumber, currentFormula);
+        } else {
+            formulaList.add(questionNumber, currentFormula);
+        }
+    }
+
+    public void changeQuestion(boolean direction) {//true: next, false:previous
+        if (!((questionNumber == 0 && !direction) || //Do nothing if the user tries to access a negative question
+                (currentFormula.isEmpty() && direction))) { //Do nothing if the user tries to save an empty formula
+
+            /* Save current formula */
+            updateFormulaList();
+
+
+            /* Update the card to display the correct formula */
+            if (direction) {//Next
+                questionNumber++;
+                if (formulaList.size() > questionNumber) {
+                    currentFormula = formulaList.get(questionNumber);
+                } else {
+                    currentFormula = new FormulaList.Formula("", "");
+                }
+                updateFormula(1);
+            } else {//Previous
+                questionNumber--;
+                currentFormula = formulaList.get(questionNumber);
+                updateFormula(2);
+            }
+
+            isFront = true;
+
+            String text = currentFormula.getQuestion();
+            Xd.print(text);
+            if (text.length() >= 4) {
+                text = text.substring(2, text.length() - 2);//Removes the "$$" characters
+            }
+            editText.setText(text);
+            editText.setHint(getString(R.string.hint_question_input));
+        } else {
+            updateFormula(3);
+        }
+    }
+
+    public void save() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Save to file named:");
+        final EditText input = new EditText(this);
+        builder.setView(input);
+
+        builder.setPositiveButton(getString(R.string.action_save), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                updateFormulaList();
+                formulaList.write(
+                        new File(getFilesDir(),
+                                getString(R.string.path_default_formulas) +
+                                        "/" +
+                                        input.getText().toString() +
+                                        ".xml"));
+                Toast.makeText(CreateActivity.this, "Saved", Toast.LENGTH_SHORT).show();//TODO: Translate
+            }
+        });
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
+    }
 
     /* Buttons */
 
+    public void onMathViewPressed(View view) {
+        isFront = !isFront;
+
+        String text = currentFormula.getFormula(isFront);
+        Xd.print(text);
+        if (text.length() >= 4) {
+            text = text.substring(2, text.length() - 2);//Removes the "$$" characters
+        }
+        editText.setText(text);
+        if (isFront) {
+            editText.setHint(getString(R.string.hint_question_input));
+        } else {
+            editText.setHint(getString(R.string.hint_answer_input));
+        }
+
+        getFragmentManager().executePendingTransactions();
+        updateFormula(4);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_previous:
+                changeQuestion(false);
+
+                break;
+            case R.id.action_next:
+                changeQuestion(true);
+
+                break;
+            case R.id.action_help:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.help_url)));
+                startActivity(browserIntent);
+                break;
+            case R.id.action_save:
+                save();
+                break;
+            default:
+                Xd.error("ERROR: Action not recognised in onOptionsItemSelected(): " + item.toString() + " id: " + item.getItemId());
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+
+    }
 
 
     /* Getters & Setters */
-
-
-    public static class CreateCard extends Fragment {
-        private boolean isFront = true;
-
-
-        private FormulaList.Formula formula;
-        private Context context;
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            Xd.print("On create view");
-            return inflater.inflate(R.layout.fragment_card, container, false);
-        }
-
-        @Nullable
-        @Override
-        public View getView() {
-            View view = super.getView();
-            if (view != null) {
-                view.setBackgroundColor(Color.RED);
-            }
-            Xd.print("GET VIEW");
-
-
-            return view;
-        }
-
-        @Override
-        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-            super.onViewCreated(view, savedInstanceState);
-            Xd.print("on view created create view");
-            getView().setBackgroundColor(Color.GREEN);
-            updateText();
-        }
-
-        public String getText() {
-            Xd.print(getFormula().toString() + " ASDF ");
-
-
-            return isFront ? formula.getQuestion() : formula.getAnswer();
-        }
-
-
-        private void updateText() {
-            ((MathView) getView().findViewById(R.id.math_view)).setText(getText());
-            if (!isFront) {
-                ((TextView) getView().findViewById(R.id.textView)).setText("Press to show the question");
-            }
-        }
-
-
-        public boolean isFront() {
-            return isFront;
-        }
-
-        public void setFront(boolean front) {
-            isFront = front;
-            if (!(getView() == null)) {
-                updateText();
-            }
-        }
-
-        public FormulaList.Formula getFormula() {
-            return formula;
-        }
-
-        public void setFormula(FormulaList.Formula formula) {
-            this.formula = formula;
-        }
-    }
 
 
 }
