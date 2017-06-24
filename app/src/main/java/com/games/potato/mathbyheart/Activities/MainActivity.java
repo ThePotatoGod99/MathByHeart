@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.games.potato.mathbyheart.math.Xd;
 import com.google.android.gms.ads.AdRequest;
@@ -58,13 +61,6 @@ public class MainActivity extends AppCompatActivity
                 .build();//"FB2944BD719884A6E6319E924DCEFB28"
         mAdView.loadAd(adRequest);
 
-
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.setDrawerListener(toggle);
-//        toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -77,40 +73,7 @@ public class MainActivity extends AppCompatActivity
             preferences.edit().putBoolean("first_start", false).commit();
         }
 
-        ListView listView = (ListView) findViewById(R.id.list_view);
-
-        String items[] = {getString(R.string.integrals),
-                getString(R.string.derivatives),
-                "Create",
-                getString(R.string.multiplications),
-                "⭐"};
-        String formulas[] = {"$$\\int{\\frac{du}{a^2+u^2}}$$",
-                "$$\\frac{d}{du}(\\frac{u}{v})$$",
-                "Create",
-                "$$3 \\times 4$$",
-                "$$\\star\\text{Starred Formulas}\\star$$"};
-        MainMenuList mainMenuList = new MainMenuList(this, items, formulas);
-        listView.setAdapter(mainMenuList);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                String string = parent.getItemAtPosition(position).toString();
-                if (string.equals("⭐")) {
-                    string = "starredList";
-                }
-                else if(string.equals("Create")){
-                    Intent createActivityIntent = new Intent(MainActivity.this, CreateActivity.class);
-                    startActivity(createActivityIntent);
-                }
-                else {
-                    Intent practiceActivityIntent = new Intent(MainActivity.this, PracticeActivity.class);
-                    practiceActivityIntent.setData(Uri.parse(string + ".xml"));
-                    startActivity(practiceActivityIntent);
-                }
-            }
-        });
+        reload();
     }
 
     @Override
@@ -119,6 +82,40 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
+    public void reload() {
+        ListView listView = (ListView) findViewById(R.id.list_view);
+        File file = new File(getFilesDir(), "default_formulas");
+
+        ArrayList<String> items = new ArrayList<String>(Arrays.asList(file.list()));
+        items.add("Create");
+        items.add("⭐");
+
+        ListAdapter listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, items);
+
+        listView.setAdapter(listAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String string = parent.getItemAtPosition(position).toString();
+                if (string.equals("Create")) {
+                    Intent createActivityIntent = new Intent(MainActivity.this, CreateActivity.class);
+                    startActivity(createActivityIntent);
+                } else {
+                    if (string.equals("⭐")) {
+                        Xd.print("STAR");
+                        string = "starredList";
+                    }
+                    Intent practiceActivityIntent = new Intent(MainActivity.this, PracticeActivity.class);
+                    practiceActivityIntent.setData(Uri.parse(string));
+                    startActivity(practiceActivityIntent);
+
+                }
+            }
+        });
+    }
 
     public void list(File file) {
         for (String string : file.list()) {
@@ -161,7 +158,7 @@ public class MainActivity extends AppCompatActivity
 
         Xd.print("\n\nApp Starting \n\n\n");
 
-
+        reload();
     }
 
     public void copyFileOrDir(String path) {
@@ -235,8 +232,14 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_reset) {
-            reset();
+        switch (id) {
+            case R.id.action_reset:
+                reset();
+                break;
+            case R.id.action_reload:
+                reload();
+                Toast.makeText(this, "Reload", Toast.LENGTH_SHORT).show();
+                break;
         }
 
         return super.onOptionsItemSelected(item);

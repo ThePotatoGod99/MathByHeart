@@ -119,20 +119,20 @@ public class CreateActivity extends AppCompatActivity {
     }
 
     public void updateFormulaList() {
-        if (formulaList.size() > questionNumber) {
-            formulaList.set(questionNumber, currentFormula);
-        } else {
-            formulaList.add(questionNumber, currentFormula);
+        if(!currentFormula.isEmpty()) {
+            if (formulaList.size() > questionNumber) {
+                formulaList.set(questionNumber, currentFormula);
+            } else {
+                formulaList.add(questionNumber, currentFormula);
+            }
         }
     }
 
     public void changeQuestion(boolean direction) {//true: next, false:previous
         if (!((questionNumber == 0 && !direction) || //Do nothing if the user tries to access a negative question
                 (currentFormula.isEmpty() && direction))) { //Do nothing if the user tries to save an empty formula
-
             /* Save current formula */
             updateFormulaList();
-
 
             /* Update the card to display the correct formula */
             if (direction) {//Next
@@ -177,8 +177,7 @@ public class CreateActivity extends AppCompatActivity {
                         new File(getFilesDir(),
                                 getString(R.string.path_default_formulas) +
                                         "/" +
-                                        input.getText().toString() +
-                                        ".xml"));
+                                        input.getText().toString()));
                 Toast.makeText(CreateActivity.this, "Saved", Toast.LENGTH_SHORT).show();//TODO: Translate
             }
         });

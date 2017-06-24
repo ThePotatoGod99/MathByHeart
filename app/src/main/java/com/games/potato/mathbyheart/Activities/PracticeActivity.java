@@ -88,8 +88,8 @@ public class PracticeActivity extends AppCompatActivity {
                         getString(R.string.path_default_formulas) + "/" + dataFileName)
         );
         if (formulaList == null || formulaList.isEmpty()) {
-            if (dataFileName.equals("starredList.xml")) {//TODO: Change
-                Toast.makeText(PracticeActivity.this, "No starred formulas. Press the star at a difficult question to star it", Toast.LENGTH_SHORT).show();
+            if (dataFileName.equals("starredList")) {//TODO: Change
+                Toast.makeText(PracticeActivity.this, "No starred formulas. Press the star at a difficult question to star it", Toast.LENGTH_LONG).show();//TODO: Translate
             } else {
                 Toast.makeText(PracticeActivity.this, "No formulas in this section", Toast.LENGTH_SHORT).show();
             }

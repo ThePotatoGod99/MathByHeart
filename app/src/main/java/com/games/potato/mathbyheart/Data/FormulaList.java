@@ -263,9 +263,9 @@ public class FormulaList implements List<FormulaList.Formula> {
 
     /* Formula Class */
     public static class Formula {
-        @Element(name = "question")
+        @Element(name = "question", required = false)
         private String question;
-        @Element(name = "answer")
+        @Element(name = "answer", required = false)
         private String answer;
 
 

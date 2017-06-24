@@ -2,9 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_reload"
+        android:icon="@drawable/ic_refresh_black_24dp"
+        android:orderInCategory="100"
+        android:title="@string/action_reload"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/action_reset"
         android:icon="@android:drawable/ic_menu_revert"
-        android:orderInCategory="100"
+        android:orderInCategory="101"
         android:title="Reset"
         app:showAsAction="never"/>
 </menu>
