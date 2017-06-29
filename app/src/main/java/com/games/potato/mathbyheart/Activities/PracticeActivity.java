@@ -135,7 +135,7 @@ public class PracticeActivity extends AppCompatActivity {
     public boolean updateFormula(int animation) {
         boolean result = setFormulaWithID(questionNumber);
         Card card = new Card();
-        card.setFormula(currentCard.getFormula());
+      //  card.setFormula(currentCard.getFormula());
         card.setFront(currentCard.isFront());
 
 
@@ -244,7 +244,9 @@ public class PracticeActivity extends AppCompatActivity {
         private boolean isFront = true;
 
 
-        private FormulaList.Formula formula;
+        private FormulaList.Formula formula = new FormulaList.Formula();
+
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,

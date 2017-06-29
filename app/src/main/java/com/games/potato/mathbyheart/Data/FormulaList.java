@@ -274,7 +274,7 @@ public class FormulaList implements List<FormulaList.Formula> {
             this.answer = answer;
         }
 
-        private Formula() {
+        public Formula() {
         }
 
 
