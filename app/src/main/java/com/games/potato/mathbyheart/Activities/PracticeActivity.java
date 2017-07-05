@@ -266,6 +266,7 @@ public class PracticeActivity extends AppCompatActivity {
 
 
         private void updateText() {
+            Xd.print(getText());
             ((MathView) getView().findViewById(R.id.math_view)).setText(getText());
             if (!isFront) {
                 ((TextView) getView().findViewById(R.id.textView))
