@@ -1,15 +1,21 @@
 package com.games.potato.mathbyheart.Activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.games.potato.mathbyheart.Data.FormulaList;
 import com.games.potato.mathbyheart.R;
+import com.games.potato.mathbyheart.math.Xd;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,7 +25,7 @@ import java.util.List;
  * Created by Simon on 2017-07-05.
  */
 
-public class EditListActivity extends AppCompatActivity{
+public class EditListActivity extends AppCompatActivity {
     private String dataFileName;
 
     private FormulaList formulaList;
@@ -38,17 +44,22 @@ public class EditListActivity extends AppCompatActivity{
         super.onStart();
         if (readData()) {
             ListView listView = (ListView) findViewById(R.id.list_view);
-
-            ArrayList arrayList = new ArrayList();
-            arrayList.add("hola");
-            arrayList.add("xd");
-           // ListAdapter listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, formulaList.getList());
-           // listView.setAdapter(listAdapter);
+            ListAdapter listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, formulaList.getList());
+            listView.setAdapter(listAdapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    startActivity(CreateActivity.getIntent(EditListActivity.this,
+                            dataFileName,
+                            position));
+                }
+            });
 
         } else {
             finish();
         }
     }
+
     public boolean readData() {
         formulaList = FormulaList.read(
                 new File(getFilesDir(),
@@ -66,5 +77,8 @@ public class EditListActivity extends AppCompatActivity{
 
         return true;
     }
+
+
+
 
 }

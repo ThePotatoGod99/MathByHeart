@@ -3,6 +3,11 @@
 
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
+        android:id="@+id/action_edit"
+        android:icon="@drawable/ic_mode_edit_black_24dp"
+        android:title="@string/action_edit"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/action_randomize"
         android:icon="@drawable/ic_shuffle_black_24dp"
         android:title="@string/action_randomize"

@@ -54,8 +54,8 @@ public class FormulaList implements List<FormulaList.Formula> {
                     String answer = "";
                     for (int x = formulaList.table.getStartNumber(); x <= formulaList.table.getEndNumber(); x++) {
                         for (int y = formulaList.table.getStartNumber(); y <= formulaList.table.getEndNumber(); y++) {
-                            operation = "$$" + x + formulaList.table.getOperation() + y + "$$";
-                            answer = "$$" + formulaList.table.getAnswer(x, y).toString() + "$$";
+                            operation = x + formulaList.table.getOperation() + y;
+                            answer = formulaList.table.getAnswer(x, y).toString();
                             formulaList.add(new Formula(
                                     operation,
                                     answer
@@ -261,6 +261,10 @@ public class FormulaList implements List<FormulaList.Formula> {
     }
 
 
+    public List getList() {
+        return list;
+    }
+
     /* Formula Class */
     public static class Formula {
         @Element(name = "question", required = false)
@@ -284,11 +288,10 @@ public class FormulaList implements List<FormulaList.Formula> {
         }
 
         /* Getters & Setters */
-        public String getFormula(boolean isFront){
-            if(isFront){
+        public String getFormula(boolean isFront) {
+            if (isFront) {
                 return question;
-            }
-            else{
+            } else {
                 return answer;
             }
         }
@@ -312,10 +315,8 @@ public class FormulaList implements List<FormulaList.Formula> {
 
         @Override
         public String toString() {
-            return "Formula{" +
-                    "question='" + question + '\'' +
-                    ", answer='" + answer + '\'' +
-                    '}';
+            return "question='" + question + '\'' +
+                    "\nanswer='" + answer + '\'';
         }
 
         @Override

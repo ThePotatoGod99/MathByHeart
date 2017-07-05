@@ -28,6 +28,8 @@
 
     <string name="action_reload">Reload</string>
 
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
 
     <string name="btn_1_label">◄ Back</string>
     <string name="btn_2_label">Next ►</string>

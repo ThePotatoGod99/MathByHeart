@@ -1,6 +1,5 @@
 package com.games.potato.mathbyheart.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -17,6 +16,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,12 +38,13 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
-import io.github.kexanie.library.MathView;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     SharedPreferences preferences;
+
+
+    MainMenuList mainMenuList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity
 
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
-//                .addTestDevice("FB2944BD719884A6E6319E924DCEFB28")
+                // .addTestDevice("FB2944BD719884A6E6319E924DCEFB28")
                 .build();//"FB2944BD719884A6E6319E924DCEFB28"
         mAdView.loadAd(adRequest);
 
@@ -90,11 +91,13 @@ public class MainActivity extends AppCompatActivity
         ArrayList<String> items = new ArrayList<String>(Arrays.asList(file.list()));
         items.remove("starredList");//TODO: Change
         items.add("Create");
-        items.add("⭐");
+        items.add("⭐");/* Star emoji */
 
-        ListAdapter listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, items);
 
-        listView.setAdapter(listAdapter);
+        mainMenuList = new MainMenuList(this,
+                items);
+
+        listView.setAdapter(mainMenuList);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -106,7 +109,6 @@ public class MainActivity extends AppCompatActivity
                     startActivity(createActivityIntent);
                 } else {
                     if (string.equals("⭐")) {
-                        Xd.print("STAR");
                         string = "starredList";
                     }
                     Intent practiceActivityIntent = new Intent(MainActivity.this, PracticeActivity.class);
@@ -116,7 +118,10 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
+
     }
+
 
     public void list(File file) {
         for (String string : file.list()) {
@@ -160,6 +165,7 @@ public class MainActivity extends AppCompatActivity
         Xd.print("\n\nApp Starting \n\n\n");
 
         reload();
+
     }
 
     public void copyFileOrDir(String path) {
@@ -241,6 +247,9 @@ public class MainActivity extends AppCompatActivity
                 reload();
                 Toast.makeText(this, "Reload", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.action_edit:
+                mainMenuList.toggleButtonsVisible();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -264,67 +273,80 @@ public class MainActivity extends AppCompatActivity
         }
         if (id == R.id.action_reset) {
             reset();
-            //  menu.add(item.getGroupId(), Menu.NONE, , "hola");
         }
 
-        /*if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private class MainMenuList extends ArrayAdapter<String> {
+    private class MainMenuList extends ArrayAdapter<String> implements ListAdapter {
         //TODO: Rename
-        private final Activity context;
-        private String[] items;
+        private final MainActivity context;
+        private ArrayList<String> items;
         private String[] formulas;
-        private MathView[] mathViews;
         private TextView[] textViews;
 
+        private boolean showButtons = false;
 
-        public MainMenuList(Activity context, String[] items, String[] formulas) {
+        public MainMenuList(MainActivity context, ArrayList<String> items) {
             super(context, R.layout.list_layout, R.id.text_view, items);
             this.items = items;
             this.formulas = formulas;
             this.context = context;
-            mathViews = new MathView[formulas.length];
-            textViews = new TextView[items.length];
+            textViews = new TextView[items.size()];
+
+
         }
 
         @Override
-        public View getView(int position, View view, ViewGroup parent) {
+        public View getView(final int position, View view, ViewGroup parent) {
             super.getView(position, view, parent);
 
             LayoutInflater inflater = context.getLayoutInflater();
             View rowView = inflater.inflate(R.layout.list_layout, null, true);
 
-
             textViews[position] = (TextView) rowView.findViewById(R.id.text_view);
+            Button button_edit = (Button) rowView.findViewById(R.id.action_edit);//TODO: Change to btn_edit
+            button_edit.setVisibility(
+                    showButtons ? View.VISIBLE : View.INVISIBLE
+            );
+            button_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, EditListActivity.class);
+                    intent.setData(Uri.parse(items.get(position)));
+                    startActivity(intent);
+                }
+            });
 
-            mathViews[position] = (MathView) rowView.findViewById(R.id.math_view);
-            mathViews[position].setEngine(MathView.Engine.KATEX);
-
+            Button button_delete = (Button) rowView.findViewById(R.id.action_delete);
+            button_delete.setVisibility(
+                    showButtons ? View.VISIBLE : View.INVISIBLE
+            );
+            button_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    File file = new File(getFilesDir()
+                            , getString(R.string.path_default_formulas) + "/" + items.get(position));
+                    file.delete();
+                    context.reload();
+                }
+            });
 
             try {
-                textViews[position].setText(items[position]);
-                mathViews[position].setText(formulas[position]);
+                textViews[position].setText(items.get(position));
             } catch (ArrayIndexOutOfBoundsException e) {
                 //TODO
             }
             return rowView;
+        }
+
+
+        public void toggleButtonsVisible() {
+            showButtons = showButtons ? false : true;
+            this.notifyDataSetChanged();
         }
 
     }
