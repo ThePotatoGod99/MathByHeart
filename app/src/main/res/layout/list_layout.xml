@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:descendantFocusability="blocksDescendants">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+    >
 
     <TextView
         android:id="@+id/text_view"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         />
 
-    <io.github.kexanie.library.MathView
-        android:id="@+id/math_view"
-        android:layout_width="match_parent"
+
+    <Button
+        android:id="@+id/action_delete"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        >
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:focusable="false"
+        android:text="@string/action_delete"
+        />
 
-    </io.github.kexanie.library.MathView>
-
-
-</TableLayout>
+    <Button
+        android:id="@+id/action_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/action_delete"
+        android:focusable="false"
+        android:text="@string/action_edit"
+        />
+</RelativeLayout>

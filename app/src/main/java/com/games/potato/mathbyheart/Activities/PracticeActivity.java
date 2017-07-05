@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -183,6 +185,11 @@ public class PracticeActivity extends AppCompatActivity {
                 randomize();
                 return true;
 
+            case R.id.action_edit:
+                startActivity(CreateActivity.getIntent(PracticeActivity.this,
+                        dataFileName,
+                        questionNumber));
+                return true;
 
             default:
                 Xd.error("ERROR: Action not recognised in onOptionsItemSelected(): " + item.toString() + " id: " + item.getItemId());
@@ -242,9 +249,7 @@ public class PracticeActivity extends AppCompatActivity {
     /* Classes */
     public static class Card extends Fragment {
         private boolean isFront = true;
-
-
-        private FormulaList.Formula formula;
+        private FormulaList.Formula formula = new FormulaList.Formula();
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -264,7 +269,8 @@ public class PracticeActivity extends AppCompatActivity {
 
 
         private void updateText() {
-            ((MathView) getView().findViewById(R.id.math_view)).setText(getText());
+            Xd.print("$$" + getText() + "$$");
+            ((MathView) getView().findViewById(R.id.math_view)).setText("$$" + getText() + "$$");
             if (!isFront) {
                 ((TextView) getView().findViewById(R.id.textView))
                         .setText("Press to show the question");
