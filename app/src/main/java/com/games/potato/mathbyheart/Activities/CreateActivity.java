@@ -66,7 +66,7 @@ public class CreateActivity extends AppCompatActivity {
 
 
         Toolbar appToolbar = (Toolbar) findViewById(R.id.app_toolbar);
-        appToolbar.setTitle(getIntent().getDataString());
+        appToolbar.setTitle(getIntent().getDataString() + " (EDIT)");
         appToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(appToolbar);
 
