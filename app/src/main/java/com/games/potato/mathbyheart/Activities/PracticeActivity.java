@@ -270,7 +270,11 @@ public class PracticeActivity extends AppCompatActivity {
 
         private void updateText() {
             Xd.print("$$" + getText() + "$$");
-            ((MathView) getView().findViewById(R.id.math_view)).setText("$$" + getText() + "$$");
+            String text = getText();
+            if (formula.getUseMathJax(isFront)) {
+                text = "$$" + text + "$$";
+            }
+            ((MathView) getView().findViewById(R.id.math_view)).setText(text);
             if (!isFront) {
                 ((TextView) getView().findViewById(R.id.textView))
                         .setText("Press to show the question");

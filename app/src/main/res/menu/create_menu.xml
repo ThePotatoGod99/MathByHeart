@@ -18,7 +18,7 @@
         android:title="Previous"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/action_delete"
+        android:id="@+id/action_next"
         android:icon="@drawable/ic_arrow_forward_black_24dp"
         android:title="Item"
         app:showAsAction="always"/>

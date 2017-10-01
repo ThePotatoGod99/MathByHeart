@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,6 +32,7 @@ public class CreateActivity extends AppCompatActivity {
     static final String EXTRA_QUESTION_NUMBER = "EXTRA_QUESTION_NUMBER";
 
     EditText editText;
+    private CheckBox checkBox;
 
     private FormulaList formulaList;
 
@@ -64,6 +67,15 @@ public class CreateActivity extends AppCompatActivity {
 
         }
 
+
+
+        checkBox = (CheckBox) findViewById(R.id.checkBox);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                changeCheck(isChecked);
+            }
+        });
 
         Toolbar appToolbar = (Toolbar) findViewById(R.id.app_toolbar);
         appToolbar.setTitle(getIntent().getDataString() + " (EDIT)");
@@ -117,6 +129,8 @@ public class CreateActivity extends AppCompatActivity {
         card.setFront(isFront);
 
         card.animateReplacement(this, animation, R.id.create_container);
+        checkBox.setChecked(currentFormula.getUseMathJax(isFront));
+        Xd.print("XD" + currentFormula.toString());
     }
 
     public void updateFormulaList() {
@@ -127,6 +141,11 @@ public class CreateActivity extends AppCompatActivity {
                 formulaList.add(questionNumber, currentFormula);
             }
         }
+    }
+
+    public void changeCheck(boolean isChecked) {
+        currentFormula.setUseMathJax(isFront, isChecked);
+        updateFormula(0);
     }
 
     public void changeQuestion(boolean direction) {/* true: next, false:previous */
@@ -149,9 +168,7 @@ public class CreateActivity extends AppCompatActivity {
                 currentFormula = formulaList.get(questionNumber);
                 updateFormula(2);
             }
-
             isFront = true;
-
             String text = currentFormula.getQuestion();
             editText.setText(text);
             editText.setHint(getString(R.string.hint_question_input));
@@ -193,6 +210,9 @@ public class CreateActivity extends AppCompatActivity {
     }
 
     /* Buttons */
+    public void onCheck(View view){
+        checkBox.setChecked(!checkBox.isChecked());
+    }
 
     public void onMathViewPressed(View view) {
         isFront = !isFront;
@@ -215,11 +235,9 @@ public class CreateActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_previous:
                 changeQuestion(false);
-
                 break;
-            case R.id.action_delete:
+            case R.id.action_next:
                 changeQuestion(true);
-
                 break;
             case R.id.action_help:
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.help_url)));
@@ -238,7 +256,6 @@ public class CreateActivity extends AppCompatActivity {
 
 
     /* Getters & Setters */
-
 
 
     public static Intent getIntent(Context context, String dataFileName, int questionNumber) {

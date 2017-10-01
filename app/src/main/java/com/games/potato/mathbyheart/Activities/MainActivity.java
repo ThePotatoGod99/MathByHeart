@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity
 
         ArrayList<String> items = new ArrayList<String>(Arrays.asList(file.list()));
         items.remove("starredList");//TODO: Change
-        items.add("Create");
         items.add("⭐");/* Star emoji */
 
 
@@ -104,18 +103,13 @@ public class MainActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 String string = parent.getItemAtPosition(position).toString();
-                if (string.equals("Create")) {
-                    Intent createActivityIntent = new Intent(MainActivity.this, CreateActivity.class);
-                    startActivity(createActivityIntent);
-                } else {
-                    if (string.equals("⭐")) {
-                        string = "starredList";
-                    }
-                    Intent practiceActivityIntent = new Intent(MainActivity.this, PracticeActivity.class);
-                    practiceActivityIntent.setData(Uri.parse(string));
-                    startActivity(practiceActivityIntent);
-
+                if (string.equals("⭐")) {
+                    string = "starredList";
                 }
+                Intent practiceActivityIntent = new Intent(MainActivity.this, PracticeActivity.class);
+                practiceActivityIntent.setData(Uri.parse(string));
+                startActivity(practiceActivityIntent);
+
             }
         });
 
@@ -240,6 +234,11 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         switch (id) {
+            case R.id.action_create:
+                Intent createActivityIntent = new Intent(MainActivity.this, CreateActivity.class);
+                startActivity(createActivityIntent);
+                break;
+
             case R.id.action_reset:
                 reset();
                 break;
@@ -321,7 +320,7 @@ public class MainActivity extends AppCompatActivity
                 }
             });
 
-            Button button_delete = (Button) rowView.findViewById(R.id.action_delete);
+            Button button_delete = (Button) rowView.findViewById(R.id.action_next);
             button_delete.setVisibility(
                     showButtons ? View.VISIBLE : View.INVISIBLE
             );

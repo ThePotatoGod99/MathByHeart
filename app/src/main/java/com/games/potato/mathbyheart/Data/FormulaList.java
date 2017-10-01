@@ -11,6 +11,7 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
 import java.io.File;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -272,10 +273,25 @@ public class FormulaList implements List<FormulaList.Formula> {
         @Element(name = "answer", required = false)
         private String answer;
 
+        @Element(name = "questionUsesMathJax", required = false)
+        private boolean questionUsesMathJax = true;
+
+        @Element(name = "answerUsesMathJax", required = false)
+        private boolean answerUsesMathJax = true;
+
+
+        public Formula(String question, String answer, boolean questionUsesMathJax, boolean answerUsesMathJax){
+            this.question = question;
+            this.answer = answer;
+            this.questionUsesMathJax = questionUsesMathJax;
+            this.answerUsesMathJax = answerUsesMathJax;
+        }
 
         public Formula(String question, String answer) {
             this.question = question;
             this.answer = answer;
+            this.questionUsesMathJax = true;
+            this.answerUsesMathJax = true;
         }
 
         public Formula() {
@@ -296,6 +312,14 @@ public class FormulaList implements List<FormulaList.Formula> {
             }
         }
 
+        public void setFormula(boolean isFront, String formula) {
+            if (isFront) {
+                setQuestion(formula);
+            } else {
+                setAnswer(formula);
+            }
+        }
+
         public String getQuestion() {
             return question;
         }
@@ -312,7 +336,39 @@ public class FormulaList implements List<FormulaList.Formula> {
             this.answer = answer;
         }
 
+        public boolean questionUsesMathJax() {
+            return questionUsesMathJax;
+        }
 
+        public void setQuestionUsesMathJax(boolean questionUsesMathJax) {
+            this.questionUsesMathJax = questionUsesMathJax;
+        }
+
+        public boolean answerUsesMathJax() {
+            return answerUsesMathJax;
+        }
+
+        public void setAnswerUsesMathJax(boolean answerUsesMathJax) {
+            this.answerUsesMathJax = answerUsesMathJax;
+        }
+
+        public boolean getUseMathJax(boolean isFront){
+            if(isFront){
+                return questionUsesMathJax;
+            }
+            else{
+                return answerUsesMathJax;
+            }
+        }
+
+        public void setUseMathJax(boolean isFront, boolean useMathJax){
+            if(isFront){
+                setQuestionUsesMathJax(useMathJax);
+            }
+            else{
+                setAnswerUsesMathJax(useMathJax);
+            }
+        }
         @Override
         public String toString() {
             return "question='" + question + '\'' +
